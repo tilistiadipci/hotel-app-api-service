@@ -5,15 +5,19 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 const channelRoutes = require("./routes/channelRoutes");
 const playerRoutes = require("./routes/playerRoutes");
+const mediaRoutes = require("./routes/mediaRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
+const allowAnonymous = require("./middlewares/allowAnonymous");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Protect all endpoints with API key header
-app.use(apiKeyAuth);
+// Media: allow anonymous, then auth (will skip because flag set), then routes
+app.use("/api/media", allowAnonymous, apiKeyAuth, mediaRoutes);
 
+// Other routes: protected
+app.use(apiKeyAuth);
 app.use("/api/auth", authRoutes);
 app.use("/api/channels", channelRoutes);
 app.use("/api/players", playerRoutes);

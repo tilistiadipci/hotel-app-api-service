@@ -3,12 +3,14 @@ const { respond } = require("../helpers/response");
 const Secure = require("../helpers/secure.min");
 const secure = new Secure();
 
-// Expect `x-api-key` header containing plain token.
+// Expect `x-api-key` header containing plain token (unless req.allowAnonymous is set).
 // Middleware enforces:
-// 1) Global toggle via settings (`api_key_active` = active)
+// 1) Global toggle via settings (`api_key_status` = active)
 // 2) Decrypt stored setting (`api_key_value`) and compare to header token
 module.exports = async (req, res, next) => {
 	try {
+		if (req.allowAnonymous) return next();
+
 		// Check global API key toggle and value from settings
 		const activeSetting = await Setting.getByKey("api_key_status");
 		if (!activeSetting || activeSetting.value !== "active") {
