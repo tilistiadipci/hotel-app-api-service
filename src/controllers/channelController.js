@@ -1,29 +1,21 @@
-const pool = require("../config/database");
+const Channel = require("../models/channelModel");
+const { respond } = require("../helpers/response");
 
 exports.getChannels = async (req, res) => {
 	try {
-		const [rows] = await pool.query(
-			"SELECT id, name, category FROM channels WHERE is_active = 1",
-		);
-
-		res.json(rows);
+		const rows = await Channel.listActive();
+		return respond(res, 200, "success", rows, "Channel list");
 	} catch (err) {
-		res.status(500).json({ error: err.message });
+		return respond(res, 500, err.message, []);
 	}
 };
 
 exports.getStream = async (req, res) => {
 	try {
-		const [rows] = await pool.query(
-			"SELECT stream_url FROM channels WHERE id = ? AND is_active = 1",
-			[req.params.id],
-		);
-
-		if (!rows.length)
-			return res.status(404).json({ message: "Channel not found" });
-
-		res.json(rows[0]);
+		const stream = await Channel.getActiveStreamByUuid(req.params.uuid);
+		if (!stream) return respond(res, 404, "Channel not found", []);
+		return respond(res, 200, "success", stream, "Channel stream");
 	} catch (err) {
-		res.status(500).json({ error: err.message });
+		return respond(res, 500, err.message, []);
 	}
 };

@@ -1,8 +1,7 @@
 const router = require("express").Router();
 const controller = require("../controllers/channelController");
-const auth = require("../middlewares/authMiddleware");
 
-router.get("/", auth, controller.getChannels);
-router.get("/:id/stream", auth, controller.getStream);
+router.get("/", controller.getChannels);
+router.get("/:id/stream", controller.getStream);
 
 module.exports = router;
