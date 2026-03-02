@@ -13,8 +13,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Media: allow anonymous, then auth (will skip because flag set), then routes
-app.use("/api/media", allowAnonymous, apiKeyAuth, mediaRoutes);
+// Media routes now handle auth per-route (see mediaRoutes)
+app.use("/api/media", mediaRoutes);
 
 // Other routes: protected
 app.use(apiKeyAuth);

@@ -2,6 +2,7 @@
 const fs = require("fs");
 const { respond } = require("../helpers/response");
 const sharp = require("sharp");
+const Media = require("../models/mediaModel");
 
 const baseDir = process.env.MEDIA_STORAGE_PATH;
 
@@ -159,5 +160,30 @@ exports.getMedia = async (req, res) => {
   } catch (err) {
     console.error("getMedia error:", err.message);
     return respond(res, 500, "Failed to fetch media", []);
+  }
+};
+
+// GET /api/media/all?type=image&category=poster&active=1&q=marvel
+exports.getAllMedia = async (req, res) => {
+  try {
+    const { type, category } = req.query;
+    const rawActive = req.query.active;
+    const q = req.query.q || req.query.search || "";
+
+    const filters = {
+      type: type ? String(type).trim() : undefined,
+      category: category ? String(category).trim() : undefined,
+      isActive:
+        rawActive === undefined
+          ? undefined
+          : ["1", "true", "yes", "on"].includes(String(rawActive).toLowerCase()),
+      q: q ? String(q).trim() : undefined,
+    };
+
+    const media = await Media.list(filters);
+    return respond(res, 200, "success", media, "Media list");
+  } catch (err) {
+    console.error("getAllMedia error:", err.message);
+    return respond(res, 500, "Failed to fetch media list", []);
   }
 };
