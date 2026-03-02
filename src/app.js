@@ -24,6 +24,9 @@ app.use(express.json());
 // Media routes now handle auth per-route (see mediaRoutes)
 app.use("/api/media", mediaRoutes);
 
+// Allow anonymous access for place QR before global apiKeyAuth
+app.use("/api/places/:uuid/qr", allowAnonymous);
+
 // Other routes: protected
 app.use(apiKeyAuth);
 app.use("/api/auth", authRoutes);

@@ -3,6 +3,14 @@
 const buildMediaUrl = (type, path) =>
 	path ? `/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(path)}` : null;
 
+// Build a QR code image URL (Google Chart API) from a target URL
+const buildQrUrl = (targetUrl, size = 300) =>
+	targetUrl
+		? `https://chart.googleapis.com/chart?chs=${size}x${size}&cht=qr&chl=${encodeURIComponent(
+				targetUrl,
+			)}`
+		: null;
+
 const parseActiveFlag = (raw, defaultVal = true) => {
 	if (raw === undefined) return defaultVal;
 	const val = String(raw).toLowerCase();
@@ -11,4 +19,4 @@ const parseActiveFlag = (raw, defaultVal = true) => {
 	return defaultVal;
 };
 
-module.exports = { buildMediaUrl, parseActiveFlag };
+module.exports = { buildMediaUrl, buildQrUrl, parseActiveFlag };
