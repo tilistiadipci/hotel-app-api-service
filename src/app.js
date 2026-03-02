@@ -7,6 +7,7 @@ const channelRoutes = require("./routes/channelRoutes");
 const playerRoutes = require("./routes/playerRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const tvChannelRoutes = require("./routes/tvChannelRoutes");
+const songRoutes = require("./routes/songRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
 
@@ -23,6 +24,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/channels", channelRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/tvchannels", tvChannelRoutes);
+app.use("/api/songs", songRoutes);
 
 app.listen(3000, () => {
 	console.log("API running on port 3000");

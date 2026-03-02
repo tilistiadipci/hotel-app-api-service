@@ -1,5 +1,6 @@
-// Uniform API response helper (collection-based format)
-// Usage: respond(res, 200, "success", data, "optional title");
+// Uniform API response helpers
+// respond -> collection as array (default)
+// respondObject -> collection as single object
 const respond = (res, statusCode, msg, data = null, title = null) => {
 	const success = statusCode >= 200 && statusCode < 300;
 	const collection = Array.isArray(data)
@@ -9,7 +10,7 @@ const respond = (res, statusCode, msg, data = null, title = null) => {
 			: [];
 
 	return res.status(statusCode).json({
-		status: success ? "success" : "error",
+		status: success ? "success" : "fail",
 		status_code: statusCode,
 		title: title || msg,
 		msg,
@@ -17,4 +18,15 @@ const respond = (res, statusCode, msg, data = null, title = null) => {
 	});
 };
 
-module.exports = { respond };
+const respondObject = (res, statusCode, msg, obj = null, title = null) => {
+	const success = statusCode >= 200 && statusCode < 300;
+	return res.status(statusCode).json({
+		status: success ? "success" : "fail",
+		status_code: statusCode,
+		title: title || msg,
+		msg,
+		collection: obj === undefined ? null : obj,
+	});
+};
+
+module.exports = { respond, respondObject };

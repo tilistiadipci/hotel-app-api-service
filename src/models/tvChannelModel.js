@@ -1,5 +1,5 @@
 const pool = require("../config/database");
-const tableName = "tv_channels";
+const TABLE = "tv_channels";
 
 // List TV channels with optional filters (type, region, isActive)
 const list = async ({ type, region, isActive = true } = {}) => {
@@ -21,7 +21,7 @@ const list = async ({ type, region, isActive = true } = {}) => {
 		params.push(isActive ? 1 : 0);
 	}
 
-	let sql = `SELECT * FROM ${tableName} WHERE deleted_at IS NULL`;
+	let sql = `SELECT * FROM ${TABLE} WHERE deleted_at IS NULL`;
 	if (conditions.length) {
 		sql += ` AND ${conditions.join(" AND ")}`;
 	}
@@ -33,7 +33,7 @@ const list = async ({ type, region, isActive = true } = {}) => {
 
 const getByUuid = async (uuid) => {
 	const [rows] = await pool.execute(
-		`SELECT * FROM ${tableName} WHERE uuid = ? AND deleted_at IS NULL LIMIT 1`,
+		`SELECT * FROM ${TABLE} WHERE uuid = ? AND deleted_at IS NULL LIMIT 1`,
 		[uuid],
 	);
 	return rows[0] || null;

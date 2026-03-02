@@ -1,4 +1,5 @@
 const pool = require("../config/database");
+const TABLE = "medias";
 
 const list = async (filters = {}) => {
 	const conditions = [];
@@ -20,7 +21,7 @@ const list = async (filters = {}) => {
 		params.push(like, like, like);
 	}
 
-	let sql = "SELECT * FROM medias WHERE deleted_at IS NULL";
+	let sql = `SELECT * FROM ${TABLE} WHERE deleted_at IS NULL`;
 	if (conditions.length) {
 		sql += ` AND ${conditions.join(" AND ")}`;
 	}

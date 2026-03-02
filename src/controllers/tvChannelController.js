@@ -1,5 +1,5 @@
 const TvChannel = require("../models/tvChannelModel");
-const { respond } = require("../helpers/response");
+const { respond, respondObject } = require("../helpers/response");
 
 // GET /api/tvchannels?type=digital&region=national
 exports.getTvChannels = async (req, res) => {
@@ -45,11 +45,11 @@ exports.getTvChannelDetail = async (req, res) => {
 		if (!uuid) return respond(res, 400, "uuid is required", []);
 
 		const channel = await TvChannel.getByUuid(uuid);
-		if (!channel) return respond(res, 404, "Channel not found", []);
+		if (!channel) return respondObject(res, 404, "Channel not found", null);
 
-		return respond(res, 200, "success", channel, "TV channel detail");
+		return respondObject(res, 200, "success", channel, "TV channel detail");
 	} catch (err) {
 		console.error("getTvChannelDetail error:", err.message);
-		return respond(res, 500, "Failed to fetch TV channel detail", []);
+		return respondObject(res, 500, "Failed to fetch TV channel detail", null);
 	}
 };
