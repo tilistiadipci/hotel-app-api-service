@@ -1,30 +1,18 @@
 const Song = require("../models/songModel");
 const { respond, respondObject } = require("../helpers/response");
-
-const buildImageUrl = (path) =>
-	path ? `/api/media?type=image&path=${encodeURIComponent(path)}` : null;
-const buildAudioUrl = (path) =>
-	path ? `/api/media?type=audio&path=${encodeURIComponent(path)}` : null;
+const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
 
 const mapWithImage = (rows) =>
 	rows.map((row) => ({
 		...row,
-		storage_image: buildImageUrl(row.image_path),
-		storage_audio: buildAudioUrl(row.audio_path),
+		storage_image: buildMediaUrl("image", row.image_path),
+		storage_audio: buildMediaUrl("audio", row.audio_path),
 	}));
 
 // GET /api/songs?artist_uuid=...&album_uuid=...&active=1&q=love
 exports.getSongs = async (req, res) => {
 	try {
-		const rawActive = req.query.active;
-		const isActive =
-			rawActive === undefined
-				? true
-				: ["1", "true", "yes", "on"].includes(String(rawActive).toLowerCase())
-					? true
-					: ["0", "false", "no", "off"].includes(String(rawActive).toLowerCase())
-						? false
-						: true;
+		const isActive = parseActiveFlag(req.query.active, true);
 
 		const filters = {
 			artistUuid: req.query.artist_uuid,

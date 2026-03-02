@@ -1,5 +1,6 @@
 const TvChannel = require("../models/tvChannelModel");
 const { respond, respondObject } = require("../helpers/response");
+const { parseActiveFlag } = require("../helpers/common");
 
 // GET /api/tvchannels?type=digital&region=national
 exports.getTvChannels = async (req, res) => {
@@ -21,14 +22,7 @@ exports.getTvChannels = async (req, res) => {
 				? String(rawRegion).toLowerCase()
 				: undefined;
 
-		const isActive =
-			rawActive === undefined
-				? true // default to active channels only
-				: ["1", "true", "yes", "on"].includes(String(rawActive).toLowerCase())
-					? true
-					: ["0", "false", "no", "off"].includes(String(rawActive).toLowerCase())
-						? false
-						: true;
+		const isActive = parseActiveFlag(rawActive, true);
 
 		const channels = await TvChannel.list({ type, region, isActive });
 		return respond(res, 200, "success", channels, "TV channel list");
