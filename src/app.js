@@ -12,6 +12,8 @@ const movieRoutes = require("./routes/movieRoutes");
 const movieCategoryRoutes = require("./routes/movieCategoryRoutes");
 const guideRoutes = require("./routes/guideRoutes");
 const guideCategoryRoutes = require("./routes/guideCategoryRoutes");
+const placeRoutes = require("./routes/placeRoutes");
+const placeCategoryRoutes = require("./routes/placeCategoryRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
 
@@ -33,6 +35,8 @@ app.use("/api/movies", movieRoutes);
 app.use("/api/movie-categories", movieCategoryRoutes);
 app.use("/api/guides", guideRoutes);
 app.use("/api/guide-categories", guideCategoryRoutes);
+app.use("/api/places", placeRoutes);
+app.use("/api/place-categories", placeCategoryRoutes);
 
 app.listen(3000, () => {
 	console.log("API running on port 3000");
