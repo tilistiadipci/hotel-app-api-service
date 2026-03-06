@@ -29,6 +29,10 @@ app.use("/api/media", mediaRoutes);
 
 // Allow anonymous access for place QR before global apiKeyAuth
 app.use("/api/places/:uuid/qr", allowAnonymous);
+app.use("/api/menu-transactions/notifications/midtrans", allowAnonymous);
+app.use("/api/menu-transactions/payment-finish", allowAnonymous);
+app.use("/api/menu-transactions/:uuid/payment-page", allowAnonymous);
+app.use("/api/menu-transactions/:uuid/payment-finish", allowAnonymous);
 
 // Other routes: protected
 app.use(apiKeyAuth);
