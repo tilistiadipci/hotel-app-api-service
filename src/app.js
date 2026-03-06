@@ -14,6 +14,9 @@ const guideRoutes = require("./routes/guideRoutes");
 const guideCategoryRoutes = require("./routes/guideCategoryRoutes");
 const placeRoutes = require("./routes/placeRoutes");
 const placeCategoryRoutes = require("./routes/placeCategoryRoutes");
+const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
+const menuItemRoutes = require("./routes/menuItemRoutes");
+const menuTransactionRoutes = require("./routes/menuTransactionRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
 
@@ -40,7 +43,15 @@ app.use("/api/guides", guideRoutes);
 app.use("/api/guide-categories", guideCategoryRoutes);
 app.use("/api/places", placeRoutes);
 app.use("/api/place-categories", placeCategoryRoutes);
+app.use("/api/menu-categories", menuCategoryRoutes);
+app.use("/api/menu-items", menuItemRoutes);
+app.use("/api/menu-transactions", menuTransactionRoutes);
 
 app.listen(3000, () => {
 	console.log("API running on port 3000");
+});
+
+console.log("QR PROXY ENV:", {
+	MIDTRANS_IS_PRODUCTION: process.env.MIDTRANS_IS_PRODUCTION,
+	serverKeyPrefix: (process.env.MIDTRANS_SERVER_KEY || "").slice(0, 15),
 });
