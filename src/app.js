@@ -1,6 +1,12 @@
 require("dotenv").config();
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
+const socket = require("./helpers/socket");
+
+const app = express();
+const server = http.createServer(app); // ✔ setelah app dibuat
 
 const authRoutes = require("./routes/authRoutes");
 const channelRoutes = require("./routes/channelRoutes");
@@ -20,7 +26,6 @@ const menuTransactionRoutes = require("./routes/menuTransactionRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
 
-const app = express();
 app.use(cors());
 app.use(express.json());
 
@@ -51,7 +56,9 @@ app.use("/api/menu-categories", menuCategoryRoutes);
 app.use("/api/menu-items", menuItemRoutes);
 app.use("/api/menu-transactions", menuTransactionRoutes);
 
-app.listen(process.env.PORT || 3000, () => {
+socket.init(server);
+
+server.listen(process.env.PORT || 3000, () => {
 	console.log("API running on port " + (process.env.PORT || 3000));
 });
 

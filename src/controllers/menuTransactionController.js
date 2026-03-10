@@ -1,5 +1,6 @@
 const MenuTx = require("../models/menuTransactionModel");
 const Player = require("../models/playerModel");
+const socket = require("../helpers/socket");
 const { respond, respondObject } = require("../helpers/response");
 const { buildMediaUrl } = require("../helpers/common");
 const {
@@ -37,7 +38,9 @@ exports.createTransaction = async (req, res) => {
 		const player = await Player.getByUuid(player_uuid);
 		if (!player) return respond(res, 404, "Player not found", []);
 
-		const normalizedPaymentMethod = String(payment_method || "").toLowerCase();
+		const normalizedPaymentMethod = String(
+			payment_method || "",
+		).toLowerCase();
 
 		const result = await MenuTx.createTransaction({
 			playerId: player.id,
@@ -108,8 +111,14 @@ exports.createTransaction = async (req, res) => {
 			result.payment.payment_finish_url_local = `/api/menu-transactions/payment-finish?order_id=${encodeURIComponent(result.invoice_number)}`;
 		}
 
-		return respond(res, 201, "success", result, "Menu transaction created");
+		const io = socket.getIO();
+		io.emit("new-order", {
+			invoice_number: result.invoice_number,
+			status: result.status,
+			player_alias: player.alias,
+		});
 
+		return respond(res, 201, "success", result, "Menu transaction created");
 	} catch (err) {
 		console.error("createTransaction error:", err.message);
 		const msg =
@@ -200,11 +209,18 @@ exports.getTransactionDetail = async (req, res) => {
 // POST /api/menu-transactions/notifications/midtrans
 exports.handleMidtransNotification = async (req, res) => {
 	try {
-		const { notification, mappedStatus } = await handleNotification(req.body || {});
+		const { notification, mappedStatus } = await handleNotification(
+			req.body || {},
+		);
 		const orderId = notification?.order_id;
 
 		if (!orderId) {
-			return respondObject(res, 400, "Midtrans order_id is required", null);
+			return respondObject(
+				res,
+				400,
+				"Midtrans order_id is required",
+				null,
+			);
 		}
 
 		const tx = await MenuTx.getByInvoiceNumber(orderId);
@@ -254,7 +270,12 @@ const renderPaymentPage = async (req, res) => {
 		const tx = await MenuTx.getByUuid(uuid);
 		if (!tx) return respond(res, 404, "Transaction not found", []);
 		if (String(tx.payment_method || "").toLowerCase() !== "qris") {
-			return respond(res, 400, "Transaction payment_method is not qris", []);
+			return respond(
+				res,
+				400,
+				"Transaction payment_method is not qris",
+				[],
+			);
 		}
 
 		const paymentGateway = await MenuTx.getPaymentGatewayByTxId(tx.id);
@@ -275,7 +296,9 @@ const renderPaymentPage = async (req, res) => {
 		const snapToken = gatewayPayload?.snap_token || null;
 
 		if (!targetUrl && paymentGateway?.order_id) {
-			const midtransStatus = await getTransactionStatus(paymentGateway.order_id);
+			const midtransStatus = await getTransactionStatus(
+				paymentGateway.order_id,
+			);
 			targetUrl = midtransStatus?.redirect_url || null;
 		}
 
@@ -347,12 +370,12 @@ const renderPaymentPage = async (req, res) => {
 <body>
   <div class="card">
     ${
-			snapToken
-				? `<button id="pay-button" type="button">Open Payment</button>
+		snapToken
+			? `<button id="pay-button" type="button">Open Payment</button>
     <p><a href="${targetUrl || "#"}" target="_blank" rel="noreferrer">Open payment page directly</a></p>`
-				: `<iframe src="${targetUrl}" title="Payment Page"></iframe>
+			: `<iframe src="${targetUrl}" title="Payment Page"></iframe>
     <p><a href="${targetUrl}" target="_blank" rel="noreferrer">Open payment page directly</a></p>`
-		}
+	}
   </div>
   ${
 		snapToken
@@ -380,7 +403,7 @@ const renderPaymentPage = async (req, res) => {
     });
   </script>`
 			: ""
-	}
+  }
 </body>
 </html>`);
 	} catch (err) {
@@ -413,7 +436,8 @@ const renderPaymentFinish = async ({ orderId }, res) => {
 		});
 		await MenuTx.updatePaymentGatewayByTxId(tx.id, midtransStatus);
 
-		const transactionStatus = midtransStatus?.transaction_status || "pending";
+		const transactionStatus =
+			midtransStatus?.transaction_status || "pending";
 		const paymentType = midtransStatus?.payment_type || "snap";
 		const resolvedOrderId = midtransStatus?.order_id || orderId;
 
@@ -456,11 +480,19 @@ const renderPaymentFinish = async ({ orderId }, res) => {
       padding: 6px 10px;
       border-radius: 999px;
       background: ${
-				mappedStatus.isPaid ? "#d9fbe5" : transactionStatus === "pending" ? "#fff4cc" : "#ffe2e2"
-			};
+			mappedStatus.isPaid
+				? "#d9fbe5"
+				: transactionStatus === "pending"
+					? "#fff4cc"
+					: "#ffe2e2"
+		};
       color: ${
-				mappedStatus.isPaid ? "#116329" : transactionStatus === "pending" ? "#7a5a00" : "#9f1d1d"
-			};
+			mappedStatus.isPaid
+				? "#116329"
+				: transactionStatus === "pending"
+					? "#7a5a00"
+					: "#9f1d1d"
+		};
       font-weight: 700;
       text-transform: uppercase;
       font-size: 12px;

@@ -11,6 +11,10 @@ module.exports = async (req, res, next) => {
 	try {
 		if (req.allowAnonymous) return next();
 
+		if (req.path.startsWith("/socket.io")) {
+			return next();
+		}
+
 		// Check global API key toggle and value from settings
 		const activeSetting = await Setting.getByKey("api_key_status");
 		if (!activeSetting || activeSetting.value !== "active") {
