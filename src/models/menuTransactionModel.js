@@ -28,7 +28,7 @@ const ensurePaymentGatewayTable = async (executor) => {
 			PRIMARY KEY (id),
 			UNIQUE KEY uq_${PAYMENT_GATEWAY_TABLE}_uuid (uuid),
 			KEY idx_${PAYMENT_GATEWAY_TABLE}_tx (menu_transaction_id)
-		)`
+		)`,
 	);
 };
 
@@ -62,7 +62,9 @@ const savePaymentGateway = async (menuTransactionId, paymentResult, conn) => {
 				paymentResult.transaction_id || null,
 				paymentResult.payment_type || null,
 				paymentResult.transaction_status || null,
-				paymentResult.redirect_url || paymentResult.payment_page_url || null,
+				paymentResult.redirect_url ||
+					paymentResult.payment_page_url ||
+					null,
 				paymentResult.qr_code_base64 || null,
 				payloadJson,
 				existingRows[0].id,
@@ -92,18 +94,37 @@ const savePaymentGateway = async (menuTransactionId, paymentResult, conn) => {
 			paymentResult.transaction_id || null,
 			paymentResult.payment_type || null,
 			paymentResult.transaction_status || null,
-			paymentResult.redirect_url || paymentResult.payment_page_url || null,
+			paymentResult.redirect_url ||
+				paymentResult.payment_page_url ||
+				null,
 			paymentResult.qr_code_base64 || null,
 			payloadJson,
 		],
 	);
 };
 
-const generateInvoiceNumber = (txId) => {
+const generateInvoiceNumber = async (conn) => {
 	const now = new Date();
-	const datePart = now.toISOString().slice(0, 10).replace(/-/g, "");
-	const paddedId = String(txId).padStart(3, "0");
-	return `INV-${datePart}-${paddedId}`;
+
+	const year = now.getFullYear();
+	const month = String(now.getMonth() + 1).padStart(2, "0");
+	const day = String(now.getDate()).padStart(2, "0");
+
+	const datePart = `${year}${month}${day}`;
+	const startOfDay = `${year}-${month}-${day} 00:00:00`;
+	const endOfDay = `${year}-${month}-${day} 23:59:59`;
+
+	const [rows] = await conn.execute(
+		`
+		SELECT COUNT(*) AS total
+		FROM ${INVOICE_TABLE}
+		WHERE created_at BETWEEN ? AND ?
+		`,
+		[startOfDay, endOfDay],
+	);
+
+	const sequence = String((rows[0]?.total || 0) + 1).padStart(3, "0");
+	return `INV-${datePart}-${sequence}`;
 };
 
 const getItemsByUuids = async (uuids, conn) => {
@@ -123,18 +144,19 @@ const getItemsByUuids = async (uuids, conn) => {
 
 // Create a menu transaction and its detail rows based on the current schema
 const createTransaction = async ({
-    playerId,
-    guestName,
-    paymentMethod,
-    paymentStatus = "pending",
-    status = "ordered",
-    paidAt = null,
-    taxAmount = 0,
-    serviceAmount = 0,
-    items,
-    paymentHook, // optional async hook executed before commit (e.g., Midtrans charge)
+	playerId,
+	guestName,
+	paymentMethod,
+	paymentStatus = "pending",
+	status = "ordered",
+	paidAt = null,
+	taxAmount = 0,
+	serviceAmount = 0,
+	items,
+	paymentHook,
 }) => {
 	const conn = await pool.getConnection();
+
 	try {
 		await conn.beginTransaction();
 		let paymentResult = null;
@@ -145,15 +167,16 @@ const createTransaction = async ({
 		if (!["qris", "bill"].includes(normalizedMethod)) {
 			throw new Error("payment_method must be either 'qris' or 'bill'");
 		}
-		const normalizedPaymentStatus = String(paymentStatus || "pending").toLowerCase();
+
+		const normalizedPaymentStatus = String(
+			paymentStatus || "pending",
+		).toLowerCase();
 		const normalizedStatus = String(status || "ordered").toLowerCase();
 
-		// validate items
 		if (!Array.isArray(items) || items.length === 0) {
 			throw new Error("items is required");
 		}
 
-		// normalize
 		const normalized = items.map((it) => ({
 			uuid: it.menu_item_uuid || it.menu_uuid || it.menuId || it.menu_id,
 			qty: Number(it.qty ?? it.quantity ?? 0),
@@ -167,17 +190,14 @@ const createTransaction = async ({
 			}
 		}
 
-		// 1) SELECT items once
 		const uuids = [...new Set(normalized.map((x) => x.uuid))];
 		const menus = await getItemsByUuids(uuids, conn);
 		const menuMap = new Map(menus.map((m) => [m.uuid, m]));
 
-		// ensure all uuids exist
 		for (const u of uuids) {
 			if (!menuMap.has(u)) throw new Error(`Menu item not found: ${u}`);
 		}
 
-		// 2) compute totals + prepare detail rows
 		let totalAmount = 0;
 
 		const detailRows = normalized.map(({ uuid, qty, notes }) => {
@@ -205,9 +225,11 @@ const createTransaction = async ({
 		const serviceVal = Number(serviceAmount) || 0;
 		const grandTotal = totalAmount + taxVal + serviceVal;
 		const txUuid = randomUUID();
-		const resolvedPaidAt = normalizedPaymentStatus === "paid" && !paidAt ? new Date() : paidAt || null;
+		const resolvedPaidAt =
+			normalizedPaymentStatus === "paid" && !paidAt
+				? new Date()
+				: paidAt || null;
 
-		// 3) insert transaction
 		const [txRes] = await conn.execute(
 			`INSERT INTO ${TX_TABLE} (
 				uuid,
@@ -236,9 +258,9 @@ const createTransaction = async ({
 				resolvedPaidAt,
 			],
 		);
+
 		const txId = txRes.insertId;
 
-		// 4) bulk insert details
 		const detailValues = detailRows.map((r) => [
 			txId,
 			r.menuId,
@@ -265,7 +287,7 @@ const createTransaction = async ({
 		);
 
 		const invoiceUuid = randomUUID();
-		const invoiceNumber = generateInvoiceNumber(txId);
+		const invoiceNumber = await generateInvoiceNumber(conn);
 
 		await conn.execute(
 			`INSERT INTO ${INVOICE_TABLE} (
@@ -278,7 +300,6 @@ const createTransaction = async ({
 			[invoiceUuid, txId, invoiceNumber, null, null],
 		);
 
-		// External payment hook (e.g., Midtrans charge). Throwing here will rollback DB inserts.
 		if (typeof paymentHook === "function") {
 			paymentResult = await paymentHook({
 				conn,
@@ -294,10 +315,12 @@ const createTransaction = async ({
 				detailRows,
 				paymentMethod: normalizedMethod,
 			});
+
 			await savePaymentGateway(txId, paymentResult, conn);
 		}
 
 		await conn.commit();
+
 		return {
 			id: txId,
 			uuid: txUuid,
@@ -353,7 +376,10 @@ const getByInvoiceNumber = async (invoiceNumber) => {
 	return rows[0] || null;
 };
 
-const updatePaymentStatusById = async (txId, { paymentStatus, status, paidAt }) => {
+const updatePaymentStatusById = async (
+	txId,
+	{ paymentStatus, status, paidAt },
+) => {
 	const paidAtVal = paidAt || null;
 	await pool.execute(
 		`UPDATE ${TX_TABLE}
