@@ -102,7 +102,7 @@ const savePaymentGateway = async (menuTransactionId, paymentResult, conn) => {
 const generateInvoiceNumber = (txId) => {
 	const now = new Date();
 	const datePart = now.toISOString().slice(0, 10).replace(/-/g, "");
-	const paddedId = String(txId).padStart(6, "0");
+	const paddedId = String(txId).padStart(3, "0");
 	return `INV-${datePart}-${paddedId}`;
 };
 

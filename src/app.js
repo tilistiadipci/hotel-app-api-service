@@ -51,8 +51,8 @@ app.use("/api/menu-categories", menuCategoryRoutes);
 app.use("/api/menu-items", menuItemRoutes);
 app.use("/api/menu-transactions", menuTransactionRoutes);
 
-app.listen(3000, () => {
-	console.log("API running on port 3000");
+app.listen(process.env.PORT || 3000, () => {
+	console.log("API running on port " + (process.env.PORT || 3000));
 });
 
 console.log("QR PROXY ENV:", {

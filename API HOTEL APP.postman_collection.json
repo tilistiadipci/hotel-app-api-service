@@ -1,0 +1,2206 @@
+{
+  "info": {
+    "_postman_id": "0ff24b12-5671-4898-833d-b9842b9bbe38",
+    "name": "API HOTEL APP",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "4939248",
+    "_collection_link": "https://go.postman.co/collection/4939248-0ff24b12-5671-4898-833d-b9842b9bbe38?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Media",
+      "item": [
+        {
+          "name": "Get Media Image",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/media?type=image&path=images/20260227153440_facebook.png",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "image"
+                },
+                {
+                  "key": "path",
+                  "value": "images/20260227153440_facebook.png"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Media Video",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/media?type=video&path=videos/20260228185037_at-historytracert.mp4",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "video"
+                },
+                {
+                  "key": "path",
+                  "value": "videos/20260228185037_at-historytracert.mp4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Media Audio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/media?type=audio&path=audios/20260228190201_musik.mp3",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "audio"
+                },
+                {
+                  "key": "path",
+                  "value": "audios/20260228190201_musik.mp3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/media/all",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "media",
+                "all"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": null,
+                  "description": "video, audio, image",
+                  "disabled": true
+                },
+                {
+                  "key": "is_active",
+                  "value": null,
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "TV Channel",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/tvchannels",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "tvchannels"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": null,
+                  "description": "digital or streaming",
+                  "disabled": true
+                },
+                {
+                  "key": "is_active",
+                  "value": null,
+                  "description": "0 or 1",
+                  "disabled": true
+                },
+                {
+                  "key": "region",
+                  "value": "",
+                  "description": "national or international",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/tvchannels",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "tvchannels"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": null,
+                      "description": "digital or streaming",
+                      "disabled": true
+                    },
+                    {
+                      "key": "is_active",
+                      "value": null,
+                      "description": "0 or 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "region",
+                      "value": "",
+                      "description": "national or international",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1984"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"7c0-D9vuDD6ibAn5wkuWnWI2blgRtsI\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:00:51 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"TV channel list\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"664540f1-af36-472f-91d1-1ca44ab9f3bd\",\n            \"name\": \"SCTV\",\n            \"slug\": \"sctv\",\n            \"image_id\": 21,\n            \"type\": \"digital\",\n            \"region\": \"national\",\n            \"stream_url\": null,\n            \"frequency\": \"UHF 24\",\n            \"quality\": \"HD\",\n            \"sort_order\": 1,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": 1,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T11:46:25.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 2,\n            \"uuid\": \"0dc7806b-b1cb-49fb-a89b-f6a855cf2bed\",\n            \"name\": \"TVRI\",\n            \"slug\": \"tvri\",\n            \"image_id\": 3,\n            \"type\": \"digital\",\n            \"region\": \"national\",\n            \"stream_url\": null,\n            \"frequency\": \"UHF 43\",\n            \"quality\": \"HD\",\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 3,\n            \"uuid\": \"ef8e6dfe-5ee6-4282-bafa-fe4f515dfb5d\",\n            \"name\": \"Netflix\",\n            \"slug\": \"netflix\",\n            \"image_id\": 4,\n            \"type\": \"streaming\",\n            \"region\": \"international\",\n            \"stream_url\": \"netflix.com\",\n            \"frequency\": null,\n            \"quality\": \"HD\",\n            \"sort_order\": 10,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 4,\n            \"uuid\": \"59a4107c-f7ec-4716-8323-f6d18211071f\",\n            \"name\": \"Disney+\",\n            \"slug\": \"disney-plus\",\n            \"image_id\": 5,\n            \"type\": \"streaming\",\n            \"region\": \"international\",\n            \"stream_url\": \"disneyplus.com\",\n            \"frequency\": null,\n            \"quality\": \"HD\",\n            \"sort_order\": 11,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 5,\n            \"uuid\": \"d1573496-b00a-41dc-87c4-ed94d317e97b\",\n            \"name\": \"Vidio\",\n            \"slug\": \"vidio\",\n            \"image_id\": 20,\n            \"type\": \"streaming\",\n            \"region\": \"national\",\n            \"stream_url\": \"vidio.com\",\n            \"frequency\": null,\n            \"quality\": \"HD\",\n            \"sort_order\": 12,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": 1,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T11:46:41.000Z\",\n            \"deleted_at\": null\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/tvchannels/664540f1-af36-472f-91d1-1ca44ab9f3bd",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "tvchannels",
+                "664540f1-af36-472f-91d1-1ca44ab9f3bd"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/tvchannels/664540f1-af36-472f-91d1-1ca44ab9f3bd",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "tvchannels",
+                    "664540f1-af36-472f-91d1-1ca44ab9f3bd"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "461"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"1cd-8kRgdVqQbxma1c/xfKuoa9aeV0g\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:02 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"TV channel detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 1,\n        \"uuid\": \"664540f1-af36-472f-91d1-1ca44ab9f3bd\",\n        \"name\": \"SCTV\",\n        \"slug\": \"sctv\",\n        \"image_id\": 21,\n        \"type\": \"digital\",\n        \"region\": \"national\",\n        \"stream_url\": null,\n        \"frequency\": \"UHF 24\",\n        \"quality\": \"HD\",\n        \"sort_order\": 1,\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": 1,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T06:03:15.000Z\",\n        \"updated_at\": \"2026-02-28T11:46:25.000Z\",\n        \"deleted_at\": null\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Music",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/songs",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "songs"
+              ],
+              "query": [
+                {
+                  "key": "artist_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "album_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": null,
+                  "description": "song title",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/songs",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "songs"
+                  ],
+                  "query": [
+                    {
+                      "key": "artist_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "album_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": null,
+                      "description": "song title",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "829"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"33d-UI1B1i0evQKByI2zThXb+t2NNfg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:09 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Song list\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 2,\n            \"uuid\": \"849133fe-cc60-4162-a400-5989c0de164e\",\n            \"artist_id\": 1,\n            \"album_id\": 2,\n            \"title\": \"MUSIK YOUTUBE\",\n            \"song_id\": 25,\n            \"duration\": 118,\n            \"image_id\": 19,\n            \"sort_order\": 0,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T12:02:03.000Z\",\n            \"updated_at\": \"2026-02-28T12:02:03.000Z\",\n            \"deleted_at\": null,\n            \"artist_uuid\": \"b6325620-9e81-4a1d-9f39-789e1203ad2e\",\n            \"artist_name\": \"John Mayer\",\n            \"album_uuid\": \"da8d6014-6745-4551-8b25-7f7a4b3fb71e\",\n            \"album_title\": \"Sob Rock\",\n            \"image_path\": \"images/20260228130428_tiktok.png\",\n            \"audio_path\": \"audios/20260228190201_musik.mp3\",\n            \"storage_image\": \"/api/media?type=image&path=images%2F20260228130428_tiktok.png\",\n            \"storage_audio\": \"/api/media?type=audio&path=audios%2F20260228190201_musik.mp3\"\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/songs/849133fe-cc60-4162-a400-5989c0de164e",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "songs",
+                "849133fe-cc60-4162-a400-5989c0de164e"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/songs/849133fe-cc60-4162-a400-5989c0de164e",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "songs",
+                    "849133fe-cc60-4162-a400-5989c0de164e"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "829"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"33d-ddLq/1tNkk6YrQ5RxZe1wiGAHNU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Song detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 2,\n        \"uuid\": \"849133fe-cc60-4162-a400-5989c0de164e\",\n        \"artist_id\": 1,\n        \"album_id\": 2,\n        \"title\": \"MUSIK YOUTUBE\",\n        \"song_id\": 25,\n        \"duration\": 118,\n        \"image_id\": 19,\n        \"sort_order\": 0,\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": null,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T12:02:03.000Z\",\n        \"updated_at\": \"2026-02-28T12:02:03.000Z\",\n        \"deleted_at\": null,\n        \"artist_uuid\": \"b6325620-9e81-4a1d-9f39-789e1203ad2e\",\n        \"artist_name\": \"John Mayer\",\n        \"album_uuid\": \"da8d6014-6745-4551-8b25-7f7a4b3fb71e\",\n        \"album_title\": \"Sob Rock\",\n        \"image_path\": \"images/20260228130428_tiktok.png\",\n        \"audio_path\": \"audios/20260228190201_musik.mp3\",\n        \"storage_image\": \"/api/media?type=image&path=images%2F20260228130428_tiktok.png\",\n        \"storage_audio\": \"/api/media?type=audio&path=audios%2F20260228190201_musik.mp3\"\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Movies",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/movies",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "movies"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/movies",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "",
+                      "description": "song title",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1051"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"41b-xv52NHZZ2t9lAMcioik8y0Awn/c\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:24 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Movie list\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"20e7ad85-50b1-4a75-8a8d-fb88b84405a4\",\n            \"title\": \"Corporis repellendus\",\n            \"description\": \"Error molestiae haru\",\n            \"image_id\": 20,\n            \"video_id\": 26,\n            \"duration\": 1752,\n            \"release_date\": \"2026-02-10T17:00:00.000Z\",\n            \"rating\": \"NC-17\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T12:20:27.000Z\",\n            \"updated_at\": \"2026-02-28T12:20:41.000Z\",\n            \"deleted_at\": null,\n            \"image_path\": \"images/20260228131548_facebook.png\",\n            \"video_path\": \"videos/20260228190541_recording-2025-05-25-165912.mp4\",\n            \"category_uuids\": \"19a96860-619c-44ff-ba29-53b18e4fa6ba,24b40104-ccff-4227-85e3-ae883e398091\",\n            \"category_names\": \"Drama,Sci-Fi\",\n            \"storage_image\": \"/api/media?type=image&path=images%2F20260228131548_facebook.png\",\n            \"storage_video\": \"/api/media?type=video&path=videos%2F20260228190541_recording-2025-05-25-165912.mp4\",\n            \"categories\": [\n                {\n                    \"uuid\": \"19a96860-619c-44ff-ba29-53b18e4fa6ba\",\n                    \"name\": \"Drama\"\n                },\n                {\n                    \"uuid\": \"24b40104-ccff-4227-85e3-ae883e398091\",\n                    \"name\": \"Sci-Fi\"\n                }\n            ]\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/movies/20e7ad85-50b1-4a75-8a8d-fb88b84405a4",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "movies",
+                "20e7ad85-50b1-4a75-8a8d-fb88b84405a4"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/movies/20e7ad85-50b1-4a75-8a8d-fb88b84405a4",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movies",
+                    "20e7ad85-50b1-4a75-8a8d-fb88b84405a4"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1051"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"41b-jrk6lqCuccbB4e0aF28KnOxxle0\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:29 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Movie detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 1,\n        \"uuid\": \"20e7ad85-50b1-4a75-8a8d-fb88b84405a4\",\n        \"title\": \"Corporis repellendus\",\n        \"description\": \"Error molestiae haru\",\n        \"image_id\": 20,\n        \"video_id\": 26,\n        \"duration\": 1752,\n        \"release_date\": \"2026-02-10T17:00:00.000Z\",\n        \"rating\": \"NC-17\",\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": null,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T12:20:27.000Z\",\n        \"updated_at\": \"2026-02-28T12:20:41.000Z\",\n        \"deleted_at\": null,\n        \"image_path\": \"images/20260228131548_facebook.png\",\n        \"video_path\": \"videos/20260228190541_recording-2025-05-25-165912.mp4\",\n        \"category_uuids\": \"19a96860-619c-44ff-ba29-53b18e4fa6ba,24b40104-ccff-4227-85e3-ae883e398091\",\n        \"category_names\": \"Drama,Sci-Fi\",\n        \"storage_image\": \"/api/media?type=image&path=images%2F20260228131548_facebook.png\",\n        \"storage_video\": \"/api/media?type=video&path=videos%2F20260228190541_recording-2025-05-25-165912.mp4\",\n        \"categories\": [\n            {\n                \"uuid\": \"19a96860-619c-44ff-ba29-53b18e4fa6ba\",\n                \"name\": \"Drama\"\n            },\n            {\n                \"uuid\": \"24b40104-ccff-4227-85e3-ae883e398091\",\n                \"name\": \"Sci-Fi\"\n            }\n        ]\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Movies Category",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/movie-categories",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "movie-categories"
+              ],
+              "query": [
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/movie-categories",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movie-categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "",
+                      "description": "song title",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1029"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"405-kVb3pzAIxB2zTTAHGaGAbrM2htY\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:38 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Movie categories\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"10d9ba46-bb9d-4717-9343-a562e5dabc79\",\n            \"name\": \"Action\",\n            \"slug\": \"action\",\n            \"description\": \"High adrenaline movies\",\n            \"sort_order\": 1,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 2,\n            \"uuid\": \"24b40104-ccff-4227-85e3-ae883e398091\",\n            \"name\": \"Drama\",\n            \"slug\": \"drama\",\n            \"description\": \"Emotional and narrative driven\",\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 3,\n            \"uuid\": \"19a96860-619c-44ff-ba29-53b18e4fa6ba\",\n            \"name\": \"Sci-Fi\",\n            \"slug\": \"sci-fi\",\n            \"description\": \"Science fiction & futuristic\",\n            \"sort_order\": 3,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Movies By Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/movie-categories/24b40104-ccff-4227-85e3-ae883e398091/movies",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "movie-categories",
+                "24b40104-ccff-4227-85e3-ae883e398091",
+                "movies"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Movie By Category",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/movie-categories/24b40104-ccff-4227-85e3-ae883e398091/movies",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "movie-categories",
+                    "24b40104-ccff-4227-85e3-ae883e398091",
+                    "movies"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "951"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3b7-+iUGETpSkmVsWHEjcBmB17cVzyU\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:01:44 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Movies by category\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"20e7ad85-50b1-4a75-8a8d-fb88b84405a4\",\n            \"title\": \"Corporis repellendus\",\n            \"description\": \"Error molestiae haru\",\n            \"image_id\": 20,\n            \"video_id\": 26,\n            \"duration\": 1752,\n            \"release_date\": \"2026-02-10T17:00:00.000Z\",\n            \"rating\": \"NC-17\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T12:20:27.000Z\",\n            \"updated_at\": \"2026-02-28T12:20:41.000Z\",\n            \"deleted_at\": null,\n            \"image_path\": \"images/20260228131548_facebook.png\",\n            \"video_path\": \"videos/20260228190541_recording-2025-05-25-165912.mp4\",\n            \"category_uuids\": \"24b40104-ccff-4227-85e3-ae883e398091\",\n            \"category_names\": \"Drama\",\n            \"storage_image\": \"/api/media?type=image&path=images%2F20260228131548_facebook.png\",\n            \"storage_video\": \"/api/media?type=video&path=videos%2F20260228190541_recording-2025-05-25-165912.mp4\",\n            \"categories\": [\n                {\n                    \"uuid\": \"24b40104-ccff-4227-85e3-ae883e398091\",\n                    \"name\": \"Drama\"\n                }\n            ]\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Guides",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/guides",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "guides"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/guides",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "guides"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "3617"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"e21-Z8nA55YN/NR++onqm6cPYoGKgFw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:08:16 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Guide list\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"28368aab-3594-4dd1-a821-a5ce95aef508\",\n            \"category_id\": 1,\n            \"title\": \"Lobby Lounge\",\n            \"slug\": \"lobby-lounge\",\n            \"short_description\": \"Cozy lounge for quick meetings or waiting area.\",\n            \"description\": \"Located on the ground floor with comfortable seating, Wi‑Fi, and refreshments available on request.\",\n            \"image_id\": 19,\n            \"open_time\": \"07:00:00\",\n            \"close_time\": \"22:00:00\",\n            \"location\": \"Ground Floor, near reception\",\n            \"contact_extension\": \"101\",\n            \"sort_order\": 1,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T10:34:32.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"a23c43c7-0117-4d0b-979b-09e91dd6f9cc\",\n            \"category_name\": \"Facilities\",\n            \"image_path\": \"images/20260228130428_tiktok.png\",\n            \"storage_image\": \"/api/media?type=image&path=images%2F20260228130428_tiktok.png\",\n            \"category\": {\n                \"uuid\": \"a23c43c7-0117-4d0b-979b-09e91dd6f9cc\",\n                \"name\": \"Facilities\"\n            }\n        },\n        {\n            \"id\": 2,\n            \"uuid\": \"21b8c655-1cfc-46e4-8fc2-5d3e99200985\",\n            \"category_id\": 2,\n            \"title\": \"Skyview Restaurant\",\n            \"slug\": \"skyview-restaurant\",\n            \"short_description\": \"All-day dining with city skyline views.\",\n            \"description\": \"Buffet breakfast and à la carte lunch/dinner featuring local and international menus.\",\n            \"image_id\": 16,\n            \"open_time\": \"06:30:00\",\n            \"close_time\": \"23:00:00\",\n            \"location\": \"Level 10\",\n            \"contact_extension\": \"555\",\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"794ececd-04e0-4331-9439-72b2f1801831\",\n            \"category_name\": \"Dining\",\n            \"image_path\": \"images/guides/skyview-restaurant.jpg\",\n            \"storage_image\": \"/api/media?type=image&path=images%2Fguides%2Fskyview-restaurant.jpg\",\n            \"category\": {\n                \"uuid\": \"794ececd-04e0-4331-9439-72b2f1801831\",\n                \"name\": \"Dining\"\n            }\n        },\n        {\n            \"id\": 3,\n            \"uuid\": \"4e291c76-ba0e-484d-bcd2-19666119d613\",\n            \"category_id\": 3,\n            \"title\": \"Infinity Pool\",\n            \"slug\": \"infinity-pool\",\n            \"short_description\": \"Outdoor heated pool with sundeck.\",\n            \"description\": \"Pool towels available on site. Please observe lifeguard instructions and swimwear policy.\",\n            \"image_id\": 17,\n            \"open_time\": \"07:00:00\",\n            \"close_time\": \"20:00:00\",\n            \"location\": \"Level 5 Terrace\",\n            \"contact_extension\": \"321\",\n            \"sort_order\": 3,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"7d9b87f3-e2fa-47f7-9572-9e608ddd0cc6\",\n            \"category_name\": \"Wellness\",\n            \"image_path\": \"images/guides/infinity-pool.jpg\",\n            \"storage_image\": \"/api/media?type=image&path=images%2Fguides%2Finfinity-pool.jpg\",\n            \"category\": {\n                \"uuid\": \"7d9b87f3-e2fa-47f7-9572-9e608ddd0cc6\",\n                \"name\": \"Wellness\"\n            }\n        },\n        {\n            \"id\": 4,\n            \"uuid\": \"d7e0523b-1d97-43c8-af22-06ba661ae920\",\n            \"category_id\": 5,\n            \"title\": \"City Shuttle\",\n            \"slug\": \"city-shuttle\",\n            \"short_description\": \"Complimentary shuttle to key city spots every hour.\",\n            \"description\": \"Reserve seats via concierge. Stops at Central Mall, Museum District, and Train Station.\",\n            \"image_id\": 18,\n            \"open_time\": \"08:00:00\",\n            \"close_time\": \"20:00:00\",\n            \"location\": \"Main entrance pick-up\",\n            \"contact_extension\": \"9\",\n            \"sort_order\": 4,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"89c42848-34f7-40cd-bf00-1554b47524b0\",\n            \"category_name\": \"Transport\",\n            \"image_path\": \"images/guides/city-shuttle.jpg\",\n            \"storage_image\": \"/api/media?type=image&path=images%2Fguides%2Fcity-shuttle.jpg\",\n            \"category\": {\n                \"uuid\": \"89c42848-34f7-40cd-bf00-1554b47524b0\",\n                \"name\": \"Transport\"\n            }\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/guides/28368aab-3594-4dd1-a821-a5ce95aef508",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "guides",
+                "28368aab-3594-4dd1-a821-a5ce95aef508"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/guides/28368aab-3594-4dd1-a821-a5ce95aef508",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "guides",
+                    "28368aab-3594-4dd1-a821-a5ce95aef508"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "995"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3e3-N5+jiGvfJN8HQRJn3Y7+RDUlrdw\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:17:41 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Guide detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 1,\n        \"uuid\": \"28368aab-3594-4dd1-a821-a5ce95aef508\",\n        \"category_id\": 1,\n        \"title\": \"Lobby Lounge\",\n        \"slug\": \"lobby-lounge\",\n        \"short_description\": \"Cozy lounge for quick meetings or waiting area.\",\n        \"description\": \"Located on the ground floor with comfortable seating, Wi‑Fi, and refreshments available on request.\",\n        \"image_id\": 19,\n        \"open_time\": \"07:00:00\",\n        \"close_time\": \"22:00:00\",\n        \"location\": \"Ground Floor, near reception\",\n        \"contact_extension\": \"101\",\n        \"sort_order\": 1,\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": null,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T06:03:15.000Z\",\n        \"updated_at\": \"2026-02-28T10:34:32.000Z\",\n        \"deleted_at\": null,\n        \"category_uuid\": \"a23c43c7-0117-4d0b-979b-09e91dd6f9cc\",\n        \"category_name\": \"Facilities\",\n        \"image_path\": \"images/20260228130428_tiktok.png\",\n        \"storage_image\": \"/api/media?type=image&path=images%2F20260228130428_tiktok.png\",\n        \"category\": {\n            \"uuid\": \"a23c43c7-0117-4d0b-979b-09e91dd6f9cc\",\n            \"name\": \"Facilities\"\n        }\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Guide Category",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/guide-categories",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "guide-categories"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/guide-categories",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "guide-categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    },
+                    {
+                      "key": "q",
+                      "value": "",
+                      "description": "song title",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "1",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1522"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5f2-l7nUSL/PoEUjIRcKLpRlzdXTm2I\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:10:08 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Guide categories\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"a23c43c7-0117-4d0b-979b-09e91dd6f9cc\",\n            \"name\": \"Facilities\",\n            \"slug\": \"facilities\",\n            \"icon\": null,\n            \"sort_order\": 1,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 2,\n            \"uuid\": \"794ececd-04e0-4331-9439-72b2f1801831\",\n            \"name\": \"Dining\",\n            \"slug\": \"dining\",\n            \"icon\": null,\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 3,\n            \"uuid\": \"7d9b87f3-e2fa-47f7-9572-9e608ddd0cc6\",\n            \"name\": \"Wellness\",\n            \"slug\": \"wellness\",\n            \"icon\": null,\n            \"sort_order\": 3,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 4,\n            \"uuid\": \"2746244d-9b4b-41ff-8310-51a1805a928c\",\n            \"name\": \"Activities\",\n            \"slug\": \"activities\",\n            \"icon\": null,\n            \"sort_order\": 4,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 5,\n            \"uuid\": \"89c42848-34f7-40cd-bf00-1554b47524b0\",\n            \"name\": \"Transport\",\n            \"slug\": \"transport\",\n            \"icon\": null,\n            \"sort_order\": 5,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Guides By Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/guide-categories/794ececd-04e0-4331-9439-72b2f1801831/guides",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "guide-categories",
+                "794ececd-04e0-4331-9439-72b2f1801831",
+                "guides"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Guide By Category",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/guide-categories/794ececd-04e0-4331-9439-72b2f1801831/guides",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "guide-categories",
+                    "794ececd-04e0-4331-9439-72b2f1801831",
+                    "guides"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "974"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"3ce-PXUAjTRNPSJbTke4jELYUhUvs5M\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:10:20 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Guides by category\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 2,\n            \"uuid\": \"21b8c655-1cfc-46e4-8fc2-5d3e99200985\",\n            \"category_id\": 2,\n            \"title\": \"Skyview Restaurant\",\n            \"slug\": \"skyview-restaurant\",\n            \"short_description\": \"All-day dining with city skyline views.\",\n            \"description\": \"Buffet breakfast and à la carte lunch/dinner featuring local and international menus.\",\n            \"image_id\": 16,\n            \"open_time\": \"06:30:00\",\n            \"close_time\": \"23:00:00\",\n            \"location\": \"Level 10\",\n            \"contact_extension\": \"555\",\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"794ececd-04e0-4331-9439-72b2f1801831\",\n            \"category_name\": \"Dining\",\n            \"image_path\": \"images/guides/skyview-restaurant.jpg\",\n            \"storage_image\": \"/api/media?type=image&path=images%2Fguides%2Fskyview-restaurant.jpg\",\n            \"category\": {\n                \"uuid\": \"794ececd-04e0-4331-9439-72b2f1801831\",\n                \"name\": \"Dining\"\n            }\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Places",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/places?q=Museum",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "places"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                },
+                {
+                  "key": "q",
+                  "value": "Museum",
+                  "description": "search places"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/places",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "places"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1623"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"657-WGmHwhqOsUR+P2mw9ZxtTXMgsZs\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:17:03 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Place list\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 2,\n            \"uuid\": \"851b430e-3d5d-421c-917b-297e47a8f837\",\n            \"name\": \"Central Park\",\n            \"category_id\": 1,\n            \"description\": \"Green open space with jogging track and playground.\",\n            \"image_id\": 8,\n            \"address\": \"456 Green Ave.\",\n            \"latitude\": \"-6.21000000\",\n            \"longitude\": \"106.82000000\",\n            \"distance_km\": \"4.10\",\n            \"google_maps_url\": \"https://maps.google.com/?q=Central+Park\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"category_name\": \"Museum\",\n            \"image_path\": \"default/no-image.png\",\n            \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n            \"category\": {\n                \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n                \"name\": \"Museum\"\n            }\n        },\n        {\n            \"id\": 1,\n            \"uuid\": \"c41198a0-9428-471f-a92a-d39895312c77\",\n            \"name\": \"City History Museum\",\n            \"category_id\": 1,\n            \"description\": \"Showcases local heritage and rotating exhibitions.\",\n            \"image_id\": 7,\n            \"address\": \"123 Heritage St.\",\n            \"latitude\": \"-6.20000000\",\n            \"longitude\": \"106.81666600\",\n            \"distance_km\": \"2.50\",\n            \"google_maps_url\": \"https://maps.google.com/?q=City+History+Museum\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"category_name\": \"Museum\",\n            \"image_path\": \"default/no-image.png\",\n            \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n            \"category\": {\n                \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n                \"name\": \"Museum\"\n            }\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/places/851b430e-3d5d-421c-917b-297e47a8f837",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "places",
+                "851b430e-3d5d-421c-917b-297e47a8f837"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/places/851b430e-3d5d-421c-917b-297e47a8f837",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "places",
+                    "851b430e-3d5d-421c-917b-297e47a8f837"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "849"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"351-dRDxcIXA66yCKIGfg9EDBlVrvlg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:18:15 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Place detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 2,\n        \"uuid\": \"851b430e-3d5d-421c-917b-297e47a8f837\",\n        \"name\": \"Central Park\",\n        \"category_id\": 1,\n        \"description\": \"Green open space with jogging track and playground.\",\n        \"image_id\": 8,\n        \"address\": \"456 Green Ave.\",\n        \"latitude\": \"-6.21000000\",\n        \"longitude\": \"106.82000000\",\n        \"distance_km\": \"4.10\",\n        \"google_maps_url\": \"https://maps.google.com/?q=Central+Park\",\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": null,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T06:03:15.000Z\",\n        \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n        \"deleted_at\": null,\n        \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n        \"category_name\": \"Museum\",\n        \"image_path\": \"default/no-image.png\",\n        \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n        \"category\": {\n            \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"name\": \"Museum\"\n        }\n    }\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Place Category",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/place-categories",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "place-categories"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "All",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/place-categories",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "place-categories"
+                  ],
+                  "query": [
+                    {
+                      "key": "category_uuid",
+                      "value": "",
+                      "disabled": true
+                    },
+                    {
+                      "key": "active",
+                      "value": "",
+                      "description": "0 or 1",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1527"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"5f7-cEf/T8ckVPVbs7SuKWx9/doQJa8\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:20:04 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Place categories\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 1,\n            \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"name\": \"Museum\",\n            \"slug\": \"museum\",\n            \"icon\": \"fa-landmark\",\n            \"sort_order\": 1,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 2,\n            \"uuid\": \"379c2ba0-fd30-4120-96e0-5469c581769b\",\n            \"name\": \"Park\",\n            \"slug\": \"park\",\n            \"icon\": \"fa-tree\",\n            \"sort_order\": 2,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 3,\n            \"uuid\": \"3bba34dd-172a-4e41-ac3c-ee272dafb15c\",\n            \"name\": \"Beach\",\n            \"slug\": \"beach\",\n            \"icon\": \"fa-umbrella\",\n            \"sort_order\": 3,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 4,\n            \"uuid\": \"22e2cb2d-199a-400f-bc69-e47feec5f769\",\n            \"name\": \"Monument\",\n            \"slug\": \"monument\",\n            \"icon\": \"fa-archway\",\n            \"sort_order\": 4,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        },\n        {\n            \"id\": 5,\n            \"uuid\": \"1ce9d7b1-5205-45c2-ac91-338951d0baab\",\n            \"name\": \"Mall\",\n            \"slug\": \"mall\",\n            \"icon\": \"fa-store\",\n            \"sort_order\": 5,\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Places By Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/place-categories/4f9de043-76aa-412e-9015-47956f875616/places",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "place-categories",
+                "4f9de043-76aa-412e-9015-47956f875616",
+                "places"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Places By Category",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/place-categories/4f9de043-76aa-412e-9015-47956f875616/places",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "place-categories",
+                    "4f9de043-76aa-412e-9015-47956f875616",
+                    "places"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "1631"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"65f-/hSHo/SitGHe+JDw3UtyGSsEXNM\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:21:15 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Places by category\",\n    \"msg\": \"success\",\n    \"collection\": [\n        {\n            \"id\": 2,\n            \"uuid\": \"851b430e-3d5d-421c-917b-297e47a8f837\",\n            \"name\": \"Central Park\",\n            \"category_id\": 1,\n            \"description\": \"Green open space with jogging track and playground.\",\n            \"image_id\": 8,\n            \"address\": \"456 Green Ave.\",\n            \"latitude\": \"-6.21000000\",\n            \"longitude\": \"106.82000000\",\n            \"distance_km\": \"4.10\",\n            \"google_maps_url\": \"https://maps.google.com/?q=Central+Park\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"category_name\": \"Museum\",\n            \"image_path\": \"default/no-image.png\",\n            \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n            \"category\": {\n                \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n                \"name\": \"Museum\"\n            }\n        },\n        {\n            \"id\": 1,\n            \"uuid\": \"c41198a0-9428-471f-a92a-d39895312c77\",\n            \"name\": \"City History Museum\",\n            \"category_id\": 1,\n            \"description\": \"Showcases local heritage and rotating exhibitions.\",\n            \"image_id\": 7,\n            \"address\": \"123 Heritage St.\",\n            \"latitude\": \"-6.20000000\",\n            \"longitude\": \"106.81666600\",\n            \"distance_km\": \"2.50\",\n            \"google_maps_url\": \"https://maps.google.com/?q=City+History+Museum\",\n            \"is_active\": 1,\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"deleted_by\": null,\n            \"created_at\": \"2026-02-28T06:03:15.000Z\",\n            \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n            \"deleted_at\": null,\n            \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"category_name\": \"Museum\",\n            \"image_path\": \"default/no-image.png\",\n            \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n            \"category\": {\n                \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n                \"name\": \"Museum\"\n            }\n        }\n    ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Players",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/players",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "players"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/players/7aa3b77d-b7c8-4779-85f8-d736036eb0e7",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "players",
+                "7aa3b77d-b7c8-4779-85f8-d736036eb0e7"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"player_uuid\": \"fdbcc14b-1d0b-4dd5-b94c-db4b3efeba8f\", // required\r\n    \"guest_name\": \"John Doe\",\r\n    \"payment_method\": \"qris\", // required. qris or bill\r\n    \"payment_status\": \"pending\", // pending, paid, failed, cancelled\r\n    \"status\": \"ordered\", // 'ordered','processing','completed','cancelled'\r\n    \"tax_amount\": 0,\r\n    \"service_amount\": 0,\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"ebadb43c-0566-4b4b-a2a5-0f352ae24f74\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-transactions",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-transactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Notification Midtrans",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"player_uuid\": \"fdbcc14b-1d0b-4dd5-b94c-db4b3efeba8f\", // required\r\n    \"guest_name\": \"John Doe\",\r\n    \"payment_method\": \"qris\", // required. qris or bill\r\n    \"payment_status\": \"pending\", // pending, paid, failed, cancelled\r\n    \"status\": \"ordered\", // 'ordered','processing','completed','cancelled'\r\n    \"tax_amount\": 0,\r\n    \"service_amount\": 0,\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"ebadb43c-0566-4b4b-a2a5-0f352ae24f74\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-transactions/notifications/midtrans",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-transactions",
+                "notifications",
+                "midtrans"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu Items",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-items",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-items"
+              ],
+              "query": [
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-items/7a5eb94a-f072-4ea1-bcdc-9b31d9a7648f",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-items",
+                "7a5eb94a-f072-4ea1-bcdc-9b31d9a7648f"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Menu Categories",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-categories",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-categories"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Menu Items By Category",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-categories/4c60f4ce-9368-4d2e-a2f8-03726d026f08/items",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-categories",
+                "4c60f4ce-9368-4d2e-a2f8-03726d026f08",
+                "items"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Midtrans",
+      "item": [
+        {
+          "name": "Open Payment",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-transactions/3201d70d-7fca-4e1a-975a-536313a550f7/payment-page",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-transactions",
+                "3201d70d-7fca-4e1a-975a-536313a550f7",
+                "payment-page"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Notification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"transaction_time\": \"2026-03-06 14:47:21\",\r\n  \"transaction_status\": \"settlement\",\r\n  \"transaction_id\": \"9f6d4609-8d96-42bc-8d50-edfd4ea79565\",\r\n  \"status_message\": \"midtrans payment notification\",\r\n  \"status_code\": \"200\",\r\n  \"settlement_time\": \"2026-03-06 13:10:05\",\r\n  \"payment_type\": \"qris\",\r\n  \"order_id\": \"INV-20260306-000051\",\r\n  \"merchant_id\": \"G047199229\",\r\n  \"gross_amount\": \"149000.00\",\r\n  \"fraud_status\": \"accept\",\r\n  \"currency\": \"IDR\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-transactions/notifications/midtrans",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-transactions",
+                "notifications",
+                "midtrans"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
