@@ -8,4 +8,14 @@ const getByKey = async (key) => {
 	return rows[0] || null;
 };
 
-module.exports = { getByKey };
+const getByKeys = async (keys = []) => {
+	if (!Array.isArray(keys) || keys.length === 0) return [];
+
+	const [rows] = await pool.query(
+		"SELECT * FROM settings WHERE `key` IN (?) AND deleted_at IS NULL",
+		[keys],
+	);
+	return rows || [];
+};
+
+module.exports = { getByKey, getByKeys };

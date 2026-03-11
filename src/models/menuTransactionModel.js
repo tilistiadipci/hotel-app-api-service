@@ -1,5 +1,6 @@
 const pool = require("../config/database");
 const { randomUUID } = require("crypto");
+const Setting = require("./settingModel");
 
 const TX_TABLE = "menu_transactions";
 const DETAIL_TABLE = "menu_transaction_details";
@@ -142,6 +143,45 @@ const getItemsByUuids = async (uuids, conn) => {
 	return rows || [];
 };
 
+const isActiveSetting = (value) =>
+	String(value || "").trim().toLowerCase() === "active";
+
+const roundCurrency = (value) => Math.round(Number(value) || 0);
+
+const resolveChargeAmounts = async (baseAmount) => {
+	const settingRows = await Setting.getByKeys([
+		"tax_percentage_grand_total_status",
+		"tax_percentage_grand_total",
+		"service_charge_status",
+		"service_charge_fixed",
+	]);
+
+	const settings = new Map(settingRows.map((row) => [row.key, row.value]));
+
+	const serviceEnabled = isActiveSetting(
+		settings.get("service_charge_status"),
+	);
+	const taxEnabled = isActiveSetting(
+		settings.get("tax_percentage_grand_total_status"),
+	);
+
+	const serviceAmount = serviceEnabled
+		? roundCurrency(settings.get("service_charge_fixed"))
+		: 0;
+	const taxableBase = Number(baseAmount);
+	const taxPercentage = taxEnabled
+		? Number(settings.get("tax_percentage_grand_total")) || 0
+		: 0;
+	const taxAmount = taxEnabled
+		? roundCurrency((taxableBase * taxPercentage) / 100)
+		: 0;
+
+	return {
+		taxAmount,
+		serviceAmount,
+	};
+};
+
 // Create a menu transaction and its detail rows based on the current schema
 const createTransaction = async ({
 	playerId,
@@ -150,8 +190,6 @@ const createTransaction = async ({
 	paymentStatus = "pending",
 	status = "ordered",
 	paidAt = null,
-	taxAmount = 0,
-	serviceAmount = 0,
 	items,
 	paymentHook,
 }) => {
@@ -221,8 +259,8 @@ const createTransaction = async ({
 			};
 		});
 
-		const taxVal = Number(taxAmount) || 0;
-		const serviceVal = Number(serviceAmount) || 0;
+		const { taxAmount: taxVal, serviceAmount: serviceVal } =
+			await resolveChargeAmounts(totalAmount);
 		const grandTotal = totalAmount + taxVal + serviceVal;
 		const txUuid = randomUUID();
 		const resolvedPaidAt =

@@ -12,7 +12,7 @@ const {
 } = require("../helpers/midtrans");
 
 // POST /api/menu-transactions
-// body: { player_uuid, guest_name?, payment_method, payment_status?, status?, tax_amount?, service_amount?, items: [{ menu_item_uuid, qty, notes? }] }
+// body: { player_uuid, guest_name?, payment_method, payment_status?, status?, items: [{ menu_item_uuid, qty, notes? }] }
 exports.createTransaction = async (req, res) => {
 	try {
 		const {
@@ -22,8 +22,6 @@ exports.createTransaction = async (req, res) => {
 			payment_status,
 			status,
 			paid_at,
-			tax_amount,
-			service_amount,
 			items,
 		} = req.body || {};
 
@@ -49,8 +47,6 @@ exports.createTransaction = async (req, res) => {
 			paymentStatus: payment_status,
 			status,
 			paidAt: paid_at,
-			taxAmount: tax_amount,
-			serviceAmount: service_amount,
 			items,
 			paymentHook:
 				normalizedPaymentMethod === "qris"
