@@ -37,7 +37,7 @@ const savePaymentGateway = async (menuTransactionId, paymentResult, conn) => {
 	if (!paymentResult || !menuTransactionId) return;
 
 	const executor = conn || pool;
-	await ensurePaymentGatewayTable(executor);
+	// await ensurePaymentGatewayTable(executor);
 
 	const payloadJson = JSON.stringify(paymentResult);
 	const [existingRows] = await executor.query(
@@ -428,7 +428,7 @@ const updatePaymentStatusById = async (
 };
 
 const getPaymentGatewayByTxId = async (txId) => {
-	await ensurePaymentGatewayTable(pool);
+	// await ensurePaymentGatewayTable(pool);
 	const [rows] = await pool.execute(
 		`SELECT *
 		 FROM ${PAYMENT_GATEWAY_TABLE}
@@ -440,7 +440,7 @@ const getPaymentGatewayByTxId = async (txId) => {
 };
 
 const updatePaymentGatewayByTxId = async (txId, paymentData = {}) => {
-	await ensurePaymentGatewayTable(pool);
+	// await ensurePaymentGatewayTable(pool);
 	const payloadJson =
 		paymentData && Object.keys(paymentData).length > 0
 			? JSON.stringify(paymentData)

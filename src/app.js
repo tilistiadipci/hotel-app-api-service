@@ -11,6 +11,7 @@ const server = http.createServer(app); // ✔ setelah app dibuat
 const authRoutes = require("./routes/authRoutes");
 const channelRoutes = require("./routes/channelRoutes");
 const playerRoutes = require("./routes/playerRoutes");
+const themeRoutes = require("./routes/themeRoutes");
 const mediaRoutes = require("./routes/mediaRoutes");
 const tvChannelRoutes = require("./routes/tvChannelRoutes");
 const songRoutes = require("./routes/songRoutes");
@@ -44,6 +45,7 @@ app.use(apiKeyAuth);
 app.use("/api/auth", authRoutes);
 app.use("/api/channels", channelRoutes);
 app.use("/api/players", playerRoutes);
+app.use("/api/themes", themeRoutes);
 app.use("/api/tvchannels", tvChannelRoutes);
 app.use("/api/songs", songRoutes);
 app.use("/api/movies", movieRoutes);
