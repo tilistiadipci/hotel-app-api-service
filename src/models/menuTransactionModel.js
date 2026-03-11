@@ -8,6 +8,7 @@ const INVOICE_TABLE = "menu_transaction_invoices";
 const PAYMENT_GATEWAY_TABLE = "menu_transaction_payment_gateways";
 const ITEM_TABLE = "menu_items";
 const MEDIA_TABLE = "medias";
+const BOOKING_TABLE = "bookings";
 
 const ensurePaymentGatewayTable = async (executor) => {
 	await executor.query(
@@ -143,6 +144,22 @@ const getItemsByUuids = async (uuids, conn) => {
 	return rows || [];
 };
 
+const getActiveBookingByPlayerId = async (playerId, conn) => {
+	const executor = conn || pool;
+	const [rows] = await executor.execute(
+		`SELECT id, guest_name, checked_in_at, checked_out_at
+		FROM ${BOOKING_TABLE}
+		WHERE player_id = ?
+			AND deleted_at IS NULL
+			AND checked_out_at IS NULL
+		ORDER BY id DESC
+		LIMIT 1`,
+		[playerId],
+	);
+
+	return rows[0] || null;
+};
+
 const isActiveSetting = (value) =>
 	String(value || "").trim().toLowerCase() === "active";
 
@@ -263,6 +280,11 @@ const createTransaction = async ({
 			await resolveChargeAmounts(totalAmount);
 		const grandTotal = totalAmount + taxVal + serviceVal;
 		const txUuid = randomUUID();
+		const activeBooking = await getActiveBookingByPlayerId(playerId, conn);
+		if (!activeBooking) {
+			throw new Error("Player belum ada checkin");
+		}
+		const resolvedGuestName = activeBooking.guest_name || guestName || null;
 		const resolvedPaidAt =
 			normalizedPaymentStatus === "paid" && !paidAt
 				? new Date()
@@ -285,7 +307,7 @@ const createTransaction = async ({
 			[
 				txUuid,
 				playerId,
-				guestName || null,
+				resolvedGuestName,
 				totalAmount,
 				taxVal,
 				serviceVal,
@@ -349,7 +371,7 @@ const createTransaction = async ({
 				totalAmount,
 				taxVal,
 				serviceVal,
-				guestName: guestName || null,
+				guestName: resolvedGuestName,
 				detailRows,
 				paymentMethod: normalizedMethod,
 			});
@@ -364,6 +386,7 @@ const createTransaction = async ({
 			uuid: txUuid,
 			invoice_uuid: invoiceUuid,
 			invoice_number: invoiceNumber,
+			guest_name: resolvedGuestName,
 			total_amount: totalAmount,
 			tax_amount: taxVal,
 			service_amount: serviceVal,
