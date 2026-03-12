@@ -1460,7 +1460,7 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/places?q=Museum",
+              "raw": "{{urlhotelapp}}/api/places",
               "host": [
                 "{{urlhotelapp}}"
               ],
@@ -1483,7 +1483,8 @@
                 {
                   "key": "q",
                   "value": "Museum",
-                  "description": "search places"
+                  "description": "search places",
+                  "disabled": true
                 }
               ]
             }
@@ -1578,14 +1579,104 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/places/851b430e-3d5d-421c-917b-297e47a8f837",
+              "raw": "{{urlhotelapp}}/api/places/c251311e-8207-40b3-8531-8bf2b4796528",
               "host": [
                 "{{urlhotelapp}}"
               ],
               "path": [
                 "api",
                 "places",
-                "851b430e-3d5d-421c-917b-297e47a8f837"
+                "c251311e-8207-40b3-8531-8bf2b4796528"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "Show",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "x-api-key",
+                    "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                    "type": "text"
+                  }
+                ],
+                "url": {
+                  "raw": "{{urlhotelapp}}/api/places/851b430e-3d5d-421c-917b-297e47a8f837",
+                  "host": [
+                    "{{urlhotelapp}}"
+                  ],
+                  "path": [
+                    "api",
+                    "places",
+                    "851b430e-3d5d-421c-917b-297e47a8f837"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "X-Powered-By",
+                  "value": "Express"
+                },
+                {
+                  "key": "Access-Control-Allow-Origin",
+                  "value": "*"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json; charset=utf-8"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "849"
+                },
+                {
+                  "key": "ETag",
+                  "value": "W/\"351-dRDxcIXA66yCKIGfg9EDBlVrvlg\""
+                },
+                {
+                  "key": "Date",
+                  "value": "Mon, 02 Mar 2026 03:18:15 GMT"
+                },
+                {
+                  "key": "Connection",
+                  "value": "keep-alive"
+                },
+                {
+                  "key": "Keep-Alive",
+                  "value": "timeout=5"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"status\": \"success\",\n    \"status_code\": 200,\n    \"title\": \"Place detail\",\n    \"msg\": \"success\",\n    \"collection\": {\n        \"id\": 2,\n        \"uuid\": \"851b430e-3d5d-421c-917b-297e47a8f837\",\n        \"name\": \"Central Park\",\n        \"category_id\": 1,\n        \"description\": \"Green open space with jogging track and playground.\",\n        \"image_id\": 8,\n        \"address\": \"456 Green Ave.\",\n        \"latitude\": \"-6.21000000\",\n        \"longitude\": \"106.82000000\",\n        \"distance_km\": \"4.10\",\n        \"google_maps_url\": \"https://maps.google.com/?q=Central+Park\",\n        \"is_active\": 1,\n        \"created_by\": null,\n        \"updated_by\": null,\n        \"deleted_by\": null,\n        \"created_at\": \"2026-02-28T06:03:15.000Z\",\n        \"updated_at\": \"2026-02-28T06:03:15.000Z\",\n        \"deleted_at\": null,\n        \"category_uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n        \"category_name\": \"Museum\",\n        \"image_path\": \"default/no-image.png\",\n        \"storage_image\": \"/api/media?type=image&path=default%2Fno-image.png\",\n        \"category\": {\n            \"uuid\": \"4f9de043-76aa-412e-9015-47956f875616\",\n            \"name\": \"Museum\"\n        }\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Show QR",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/places/c251311e-8207-40b3-8531-8bf2b4796528/qr",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "places",
+                "c251311e-8207-40b3-8531-8bf2b4796528",
+                "qr"
               ]
             }
           },
