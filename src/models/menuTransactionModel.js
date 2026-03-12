@@ -282,7 +282,7 @@ const createTransaction = async ({
 		const txUuid = randomUUID();
 		const activeBooking = await getActiveBookingByPlayerId(playerId, conn);
 		if (!activeBooking) {
-			throw new Error("Player belum ada checkin");
+			throw new Error("Player belum melakukan checkin");
 		}
 		const resolvedGuestName = activeBooking.guest_name || guestName || null;
 		const resolvedPaidAt =
