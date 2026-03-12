@@ -3,6 +3,7 @@ const controller = require("../controllers/menuTransactionController");
 
 // Protected by global apiKeyAuth
 router.post("/", controller.createTransaction);
+router.post("/calculate", controller.calculateTransaction);
 router.post("/notifications/midtrans", controller.handleMidtransNotification);
 router.get("/payment-finish", controller.getTransactionPaymentFinish);
 router.get("/:uuid/payment-page", controller.getTransactionPaymentPage);

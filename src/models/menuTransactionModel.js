@@ -199,6 +199,56 @@ const resolveChargeAmounts = async (baseAmount) => {
 	};
 };
 
+const calculateTransaction = async ({ items }) => {
+	if (!Array.isArray(items) || items.length === 0) {
+		throw new Error("items is required");
+	}
+
+	const normalized = items.map((it) => ({
+		uuid: it.menu_item_uuid || it.menu_uuid || it.menuId || it.menu_id,
+		qty: Number(it.qty ?? it.quantity ?? 0),
+	}));
+
+	for (const it of normalized) {
+		if (!it.uuid) throw new Error("menu_item_uuid is required");
+		if (!Number.isFinite(it.qty) || it.qty <= 0) {
+			throw new Error(`Invalid qty for item ${it.uuid}`);
+		}
+	}
+
+	const uuids = [...new Set(normalized.map((item) => item.uuid))];
+	const menus = await getItemsByUuids(uuids);
+	const menuMap = new Map(menus.map((menu) => [menu.uuid, menu]));
+
+	for (const uuid of uuids) {
+		if (!menuMap.has(uuid)) {
+			throw new Error(`Menu item not found: ${uuid}`);
+		}
+	}
+
+	let subtotal = 0;
+
+	for (const item of normalized) {
+		const menu = menuMap.get(item.uuid);
+		const unitPrice =
+			menu.discount_price !== null && Number(menu.discount_price) > 0
+				? Number(menu.discount_price)
+				: Number(menu.price);
+
+		subtotal += unitPrice * item.qty;
+	}
+
+	const { taxAmount, serviceAmount } = await resolveChargeAmounts(subtotal);
+	const grandTotal = subtotal + taxAmount + serviceAmount;
+
+	return {
+		subtotal,
+		tax_amount: taxAmount,
+		service_amount: serviceAmount,
+		grand_total: grandTotal,
+	};
+};
+
 // Create a menu transaction and its detail rows based on the current schema
 const createTransaction = async ({
 	playerId,
@@ -508,6 +558,7 @@ const listDetailsByTxId = async (txId) => {
 };
 
 module.exports = {
+	calculateTransaction,
 	createTransaction,
 	getByUuid,
 	getInvoiceByTxId,

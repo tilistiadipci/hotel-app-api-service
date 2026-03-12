@@ -126,6 +126,38 @@ exports.createTransaction = async (req, res) => {
 	}
 };
 
+// POST /api/menu-transactions/calculate
+// body: { items: [{ menu_item_uuid, qty }] }
+exports.calculateTransaction = async (req, res) => {
+	try {
+		const { items } = req.body || {};
+
+		if (!Array.isArray(items) || items.length === 0) {
+			return respondObject(res, 400, "items is required", null);
+		}
+
+		const result = await MenuTx.calculateTransaction({ items });
+
+		return respondObject(
+			res,
+			200,
+			"success",
+			{
+				subtotal: result.subtotal,
+				tax: result.tax_amount,
+				service_charge: result.service_amount,
+				grand_total: result.grand_total,
+			},
+			"Transaction calculation",
+		);
+	} catch (err) {
+		console.error("calculateTransaction error:", err.message);
+		const msg = err?.message || "Failed to calculate transaction";
+		const isBadRequest = /(required|must|invalid|not found)/i.test(msg);
+		return respondObject(res, isBadRequest ? 400 : 500, msg, null);
+	}
+};
+
 // GET /api/menu-transactions/:uuid
 exports.getTransactionDetail = async (req, res) => {
 	try {

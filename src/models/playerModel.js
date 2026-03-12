@@ -27,7 +27,7 @@ const list = async ({ isActive, serial, includeDeleted = false } = {}) => {
 	}
 
 	const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
-	const sql = `SELECT * FROM ${TABLE} ${where} ORDER BY id DESC`;
+	const sql = `SELECT * FROM ${TABLE} ${where} ORDER BY id ASC`;
 	const [rows] = await pool.execute(sql, params);
 	return rows;
 };
@@ -66,7 +66,7 @@ const listWithThemeSummary = async ({
 			ON t.id = p.theme_id
 			AND t.deleted_at IS NULL
 		${where}
-		ORDER BY p.id DESC
+		ORDER BY p.id ASC
 	`;
 	const [rows] = await pool.execute(sql, params);
 	return rows;
