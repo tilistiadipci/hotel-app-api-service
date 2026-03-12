@@ -35,6 +35,8 @@
    ```
    npm run watch
    ```
+   if u have nodemon
+6. Enjoy~~
 
 
 ## NOTES
