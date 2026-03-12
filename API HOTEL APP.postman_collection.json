@@ -1918,14 +1918,81 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/players/7aa3b77d-b7c8-4779-85f8-d736036eb0e7",
+              "raw": "{{urlhotelapp}}/api/players/44e5295b-5ce3-4711-ac17-3ded978d7ce8",
               "host": [
                 "{{urlhotelapp}}"
               ],
               "path": [
                 "api",
                 "players",
-                "7aa3b77d-b7c8-4779-85f8-d736036eb0e7"
+                "44e5295b-5ce3-4711-ac17-3ded978d7ce8"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Themes",
+      "item": [
+        {
+          "name": "All",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/themes",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "themes"
+              ],
+              "query": [
+                {
+                  "key": "category_uuid",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "active",
+                  "value": "",
+                  "description": "0 or 1",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Show",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/themes/cea34a59-7310-4860-a269-cbd0f3524fd5",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "themes",
+                "cea34a59-7310-4860-a269-cbd0f3524fd5"
               ]
             }
           },
@@ -1949,7 +2016,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{ \r\n    \"player_uuid\": \"fdbcc14b-1d0b-4dd5-b94c-db4b3efeba8f\", // required\r\n    \"guest_name\": \"John Doe\",\r\n    \"payment_method\": \"qris\", // required. qris or bill\r\n    \"payment_status\": \"pending\", // pending, paid, failed, cancelled\r\n    \"status\": \"ordered\", // 'ordered','processing','completed','cancelled'\r\n    \"tax_amount\": 0,\r\n    \"service_amount\": 0,\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"ebadb43c-0566-4b4b-a2a5-0f352ae24f74\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
+              "raw": "{ \r\n    \"player_uuid\": \"38c265cd-9f34-46a2-a78a-977c541ae37b\", // required\r\n    \"guest_name\": \"\", // nama pelanggan, optional\r\n    \"payment_method\": \"bill\", // required. qris or bill\r\n    \"tax_amount\": 0,\r\n    \"service_amount\": 0,\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"d34eb39f-1d7b-43f6-bde1-24bf00b00ed5\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
               "options": {
                 "raw": {
                   "language": "json"
