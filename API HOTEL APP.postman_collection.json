@@ -2016,7 +2016,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{ \r\n    \"player_uuid\": \"38c265cd-9f34-46a2-a78a-977c541ae37b\", // required\r\n    \"guest_name\": \"\", // nama pelanggan, optional\r\n    \"payment_method\": \"bill\", // required. qris or bill\r\n    \"tax_amount\": 0,\r\n    \"service_amount\": 0,\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"d34eb39f-1d7b-43f6-bde1-24bf00b00ed5\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
+              "raw": "{ \r\n    \"player_uuid\": \"dfa900c3-dee2-4414-a10a-5d0945b7e9ab\", // required\r\n    \"payment_method\": \"bill\", // required. qris or bill\r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"6ac9de2c-553c-4c69-8930-901e2058c2ce\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        },\r\n        { \r\n            \"menu_item_uuid\": \"53ede797-6d69-47fd-a32c-6cb6f43437b0\", \r\n            \"qty\" : 2,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ]\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -2031,6 +2031,40 @@
               "path": [
                 "api",
                 "menu-transactions"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Calculate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{ \r\n    \"items\": [\r\n        { \r\n            \"menu_item_uuid\": \"6ac9de2c-553c-4c69-8930-901e2058c2ce\", \r\n            \"qty\" : 1,\r\n            \"notes\": \"tidak pakai gula\" \r\n        },\r\n        { \r\n            \"menu_item_uuid\": \"53ede797-6d69-47fd-a32c-6cb6f43437b0\", \r\n            \"qty\" : 2,\r\n            \"notes\": \"tidak pakai gula\" \r\n        }\r\n    ] \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{urlhotelapp}}/api/menu-transactions/calculate",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "menu-transactions",
+                "calculate"
               ]
             }
           },
