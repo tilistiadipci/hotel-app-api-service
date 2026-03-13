@@ -1,12 +1,12 @@
 const Setting = require("../models/settingModel");
+const Player = require("../models/playerModel");
 const { respond } = require("../helpers/response");
-const Secure = require("../helpers/secure.min");
-const secure = new Secure();
 
-// Expect `x-api-key` header containing plain token (unless req.allowAnonymous is set).
+// Expect `x-api-key` header containing a player token.
+// Expect `x-player-license` header containing the player serial number.
 // Middleware enforces:
 // 1) Global toggle via settings (`api_key_status` = active)
-// 2) Decrypt stored setting (`api_key_value`) and compare to header token
+// 2) Ensure the incoming token + serial exists in `players`
 module.exports = async (req, res, next) => {
 	try {
 		if (req.allowAnonymous) return next();
@@ -15,15 +15,10 @@ module.exports = async (req, res, next) => {
 			return next();
 		}
 
-		// Check global API key toggle and value from settings
+		// Check global API key toggle
 		const activeSetting = await Setting.getByKey("api_key_status");
 		if (!activeSetting || activeSetting.value !== "active") {
 			return respond(res, 401, "API key inactive", []);
-		}
-
-		const valueSetting = await Setting.getByKey("api_key_value");
-		if (!valueSetting || !valueSetting.value) {
-			return respond(res, 401, "API key not configured", []);
 		}
 
 		const apiKey = req.headers["x-api-key"];
@@ -31,18 +26,22 @@ module.exports = async (req, res, next) => {
 			return respond(res, 401, "Missing API key", []);
 		}
 
-		let storedKey;
-		try {
-			storedKey = secure.decrypt(valueSetting.value);
-		} catch (e) {
-			return respond(res, 401, "Invalid stored API key format", []);
+		const playerLicense = req.headers["x-player-license"];
+		if (!playerLicense) {
+			return respond(res, 401, "Missing player license", []);
 		}
 
-		if (apiKey !== storedKey) {
-			return respond(res, 401, "Invalid API key", []);
+		const player = await Player.getByTokenAndSerial(apiKey, playerLicense);
+		if (!player) {
+			return respond(res, 401, "player unregistered license", []);
 		}
 
-		req.apiKey = { key: apiKey };
+		req.apiKey = {
+			key: apiKey,
+			playerId: player.id,
+			playerLicense,
+		};
+		req.player = player;
 		next();
 	} catch (err) {
 		console.error("API key verification error:", err.message);

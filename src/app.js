@@ -34,6 +34,7 @@ app.use("/api/media", mediaRoutes);
 
 // Allow anonymous access for place QR before global apiKeyAuth
 app.use("/api/places/:uuid/qr", allowAnonymous);
+app.use("/api/players/:serial", allowAnonymous);
 app.use("/api/menu-transactions/notifications/midtrans", allowAnonymous);
 app.use("/api/menu-transactions/payment-finish", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-page", allowAnonymous);

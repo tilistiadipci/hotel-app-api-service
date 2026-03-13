@@ -40,9 +40,10 @@
 
 
 ## NOTES
-### API KEY SETTING VALUE DB
-R0pHRk5iVVRUTDhvN0lPaWR2am9MbVJ6d0dWMStRSXBJQW9JNnBGeFhkMXdkUUUveituVlVRQjVZb0JYdzRhbg==
 
 ### API KEY HEADER
-y0zr3hl33boako2pm90fyajmzmqubcec
+token dari players
+
+### API KEY PLAYER LICENSE
+serial player
 

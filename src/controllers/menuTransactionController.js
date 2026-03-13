@@ -12,28 +12,23 @@ const {
 } = require("../helpers/midtrans");
 
 // POST /api/menu-transactions
-// body: { player_uuid, guest_name?, payment_method, payment_status?, status?, items: [{ menu_item_uuid, qty, notes? }] }
+// header: { x-player-license }
+// body: { payment_method, items: [{ menu_item_uuid, qty, notes? }] }
 exports.createTransaction = async (req, res) => {
 	try {
-		const {
-			player_uuid,
-			guest_name,
-			payment_method,
-			payment_status,
-			status,
-			paid_at,
-			items,
-		} = req.body || {};
+		const { payment_method, items } = req.body || {};
+		const playerLicense = req.headers["x-player-license"];
 
-		if (!player_uuid)
-			return respond(res, 400, "player_uuid is required", []);
 		if (!payment_method)
 			return respond(res, 400, "payment_method is required", []);
 		if (!Array.isArray(items) || items.length === 0) {
 			return respond(res, 400, "items is required", []);
 		}
 
-		const player = await Player.getByUuid(player_uuid);
+		const player =
+			req.player && req.player.serial === playerLicense
+				? req.player
+				: await Player.getBySerial(playerLicense);
 		if (!player) return respond(res, 404, "Player not found", []);
 
 		const normalizedPaymentMethod = String(
@@ -42,11 +37,7 @@ exports.createTransaction = async (req, res) => {
 
 		const result = await MenuTx.createTransaction({
 			playerId: player.id,
-			guestName: guest_name,
 			paymentMethod: payment_method,
-			paymentStatus: payment_status,
-			status,
-			paidAt: paid_at,
 			items,
 			paymentHook:
 				normalizedPaymentMethod === "qris"

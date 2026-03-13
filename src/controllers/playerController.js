@@ -11,6 +11,53 @@ const buildFilters = (req) => {
 	return { isActive, serial };
 };
 
+const mapPlayerDetail = (rows) => {
+	const [firstRow] = rows;
+	const details = rows
+		.filter((row) => row.theme_detail_id)
+		.map((row) => ({
+			id: row.theme_detail_id,
+			uuid: row.theme_detail_uuid,
+			key: row.theme_detail_key,
+			value: row.theme_detail_value,
+			created_at: row.theme_detail_created_at,
+			updated_at: row.theme_detail_updated_at,
+		}));
+
+	return {
+		id: firstRow.id,
+		uuid: firstRow.uuid,
+		name: firstRow.name,
+		serial: firstRow.serial,
+		token: firstRow.token,
+		is_active: firstRow.is_active,
+		theme_id: firstRow.theme_id,
+		created_by: firstRow.created_by,
+		updated_by: firstRow.updated_by,
+		deleted_by: firstRow.deleted_by,
+		created_at: firstRow.created_at,
+		updated_at: firstRow.updated_at,
+		deleted_at: firstRow.deleted_at,
+		alias: firstRow.alias,
+		guest_name: firstRow.guest_name,
+		theme: firstRow.theme_ref_id
+			? {
+					id: firstRow.theme_ref_id,
+					uuid: firstRow.theme_ref_uuid,
+					name: firstRow.theme_ref_name,
+					description: firstRow.theme_ref_description,
+					is_default: firstRow.theme_ref_is_default,
+					image_id: firstRow.theme_ref_image_id,
+					image_url: buildMediaUrl(
+						"image",
+						firstRow.theme_ref_image_path,
+					),
+					details,
+				}
+			: null,
+	};
+};
+
 // GET /api/players?is_active=1&serial=ABC
 exports.getPlayers = async (req, res) => {
 	try {
@@ -42,59 +89,45 @@ exports.getPlayers = async (req, res) => {
 	}
 };
 
-// GET /api/players/:uuid
-exports.getPlayerDetail = async (req, res) => {
+const getPlayerTokenBySerial = async (serial, res) => {
+	const player = await Player.getTokenBySerial(serial);
+	if (!player) {
+		return respondObject(res, 404, "Player not found", null);
+	}
+
+	if (!player.token) {
+		return respondObject(
+			res,
+			404,
+			"Player is not registered. Please contact support",
+			null,
+		);
+	}
+
+	const rows = await Player.getDetailBySerial(serial);
+	if (!rows.length) {
+		return respondObject(res, 404, "Player not found", null);
+	}
+
+	return respondObject(
+		res,
+		200,
+		"success",
+		mapPlayerDetail(rows),
+		"Player token",
+	);
+};
+
+// GET /api/players/:serial
+exports.getPlayerTokenBySerial = async (req, res) => {
 	try {
-		const { uuid } = req.params;
-		const rows = await Player.getDetailByUuid(uuid);
-		
-		if (!rows.length) return respondObject(res, 404, "Player not found", null);
+		const { serial } = req.params;
 
-		const [firstRow] = rows;
-		const details = rows
-			.filter((row) => row.theme_detail_id)
-			.map((row) => ({
-				id: row.theme_detail_id,
-				uuid: row.theme_detail_uuid,
-				key: row.theme_detail_key,
-				value: row.theme_detail_value,
-				created_at: row.theme_detail_created_at,
-				updated_at: row.theme_detail_updated_at,
-			}));
+		if (!serial) {
+			return respondObject(res, 400, "serial is required", null);
+		}
 
-		const player = {
-			id: firstRow.id,
-			uuid: firstRow.uuid,
-			name: firstRow.name,
-			serial: firstRow.serial,
-			is_active: firstRow.is_active,
-			theme_id: firstRow.theme_id,
-			created_by: firstRow.created_by,
-			updated_by: firstRow.updated_by,
-			deleted_by: firstRow.deleted_by,
-			created_at: firstRow.created_at,
-			updated_at: firstRow.updated_at,
-			deleted_at: firstRow.deleted_at,
-			alias: firstRow.alias,
-			guest_name: firstRow.guest_name,
-			theme: firstRow.theme_ref_id
-				? {
-						id: firstRow.theme_ref_id,
-						uuid: firstRow.theme_ref_uuid,
-						name: firstRow.theme_ref_name,
-						description: firstRow.theme_ref_description,
-						is_default: firstRow.theme_ref_is_default,
-						image_id: firstRow.theme_ref_image_id,
-						image_url: buildMediaUrl(
-							"image",
-							firstRow.theme_ref_image_path,
-						),
-						details,
-					}
-				: null,
-		};
-
-		return respondObject(res, 200, "success", player, "Player detail");
+		return getPlayerTokenBySerial(serial, res);
 	} catch (err) {
 		return respondObject(res, 500, err.message, null);
 	}

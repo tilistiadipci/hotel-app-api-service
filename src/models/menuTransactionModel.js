@@ -252,7 +252,6 @@ const calculateTransaction = async ({ items }) => {
 // Create a menu transaction and its detail rows based on the current schema
 const createTransaction = async ({
 	playerId,
-	guestName,
 	paymentMethod,
 	paymentStatus = "pending",
 	status = "ordered",
@@ -334,7 +333,7 @@ const createTransaction = async ({
 		if (!activeBooking) {
 			throw new Error("Player belum melakukan checkin");
 		}
-		const resolvedGuestName = activeBooking.guest_name || guestName || null;
+		const resolvedGuestName = activeBooking.guest_name || null;
 		const resolvedPaidAt =
 			normalizedPaymentStatus === "paid" && !paidAt
 				? new Date()
