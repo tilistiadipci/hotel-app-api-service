@@ -405,8 +405,9 @@ const createTransaction = async ({
 				menu_transaction_id,
 				invoice_number,
 				created_by,
-				updated_by
-			) VALUES (?, ?, ?, ?, ?)`,
+				updated_by,
+				created_at
+			) VALUES (?, ?, ?, ?, ?, NOW())`,
 			[invoiceUuid, txId, invoiceNumber, null, null],
 		);
 
