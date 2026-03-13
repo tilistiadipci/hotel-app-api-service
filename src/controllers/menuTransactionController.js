@@ -174,7 +174,7 @@ exports.getTransactionDetail = async (req, res) => {
 			menu_uuid: d.menu_uuid || null,
 			menu_id: d.menu_id,
 			name: d.menu_name,
-			storage_image: buildMediaUrl("image", d.image_path),
+			url_image: buildMediaUrl("image", d.image_path),
 			qty: d.quantity,
 			quantity: d.quantity,
 			price: d.price,

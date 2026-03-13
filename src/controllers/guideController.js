@@ -4,7 +4,7 @@ const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
 
 const mapGuide = (row) => ({
 	...row,
-	storage_image: buildMediaUrl("image", row.image_path),
+	url_image: buildMediaUrl("image", row.image_path),
 	category: row.category_uuid
 		? { uuid: row.category_uuid, name: row.category_name }
 		: null,

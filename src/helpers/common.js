@@ -1,7 +1,7 @@
 // Shared helper functions
 
 const buildMediaUrl = (type, path) =>
-	path ? `/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(path)}` : null;
+		path ? `${process.env.APP_URL}/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(path)}` : null;
 
 // Build a QR code image URL (Google Chart API) from a target URL
 const buildQrUrl = (targetUrl, size = 300) =>

@@ -11,8 +11,8 @@ const parseCategories = (uuids, names) => {
 
 const mapMovie = (row) => ({
 	...row,
-	storage_image: buildMediaUrl("image", row.image_path),
-	storage_video: buildMediaUrl("video", row.video_path),
+	image_url: buildMediaUrl("image", row.image_path),
+	video_url: buildMediaUrl("video", row.video_path),
 	categories: parseCategories(row.category_uuids, row.category_names),
 });
 

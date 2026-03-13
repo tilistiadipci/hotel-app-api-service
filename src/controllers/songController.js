@@ -5,7 +5,7 @@ const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
 const mapWithImage = (rows) =>
 	rows.map((row) => ({
 		...row,
-		storage_image: buildMediaUrl("image", row.image_path),
+		url_image: buildMediaUrl("image", row.image_path),
 		storage_audio: buildMediaUrl("audio", row.audio_path),
 	}));
 
