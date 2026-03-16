@@ -29,4 +29,23 @@ const respondObject = (res, statusCode, msg, obj = null, title = null) => {
 	});
 };
 
-module.exports = { respond, respondObject };
+const respondPagination = (
+	res,
+	statusCode,
+	msg,
+	obj = null,
+	pagination = null,
+	title = null,
+) => {
+	const success = statusCode >= 200 && statusCode < 300;
+	return res.status(statusCode).json({
+		status: success ? "success" : "fail",
+		status_code: statusCode,
+		title: title || msg,
+		msg,
+		collection: obj === undefined ? null : obj,
+		pagination,
+	});
+};
+
+module.exports = { respond, respondObject, respondPagination };
