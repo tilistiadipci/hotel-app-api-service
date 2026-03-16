@@ -1,5 +1,5 @@
 const Movie = require("../models/movieModel");
-const { respond, respondObject } = require("../helpers/response");
+const { respond, respondObject, respondPagination } = require("../helpers/response");
 const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
 
 const parseCategories = (uuids, names) => {
@@ -19,22 +19,39 @@ const mapMovie = (row) => ({
 // Export mapper for reuse
 exports.mapMovie = mapMovie;
 
-// GET /api/movies?active=1&category_uuid=...&q=title
+// GET /api/movies?active=1&category_uuid=...&q=title&page=1&limit=20
 exports.getMovies = async (req, res) => {
 	try {
 		const isActive = parseActiveFlag(req.query.active, true);
+		const page = Number.parseInt(req.query.page, 10) || 1;
+		const limit = Number.parseInt(req.query.limit, 10) || 20;
+		const offset = Math.max((page - 1) * limit, 0);
 
 		const filters = {
 			isActive,
 			categoryUuid: req.query.category_uuid,
 			q: req.query.q || req.query.title || undefined,
+			offset,
+			limit,
 		};
 
-		const movies = await Movie.list(filters);
-		return respond(res, 200, "success", movies.map(mapMovie), "Movie list");
+		const result = await Movie.list(filters);
+		return respondPagination(
+			res,
+			200,
+			"success",
+			result.items.map(mapMovie),
+			{
+				page,
+				offset,
+				limit,
+				total: Number(result.total) || 0,
+			},
+			"Movie list",
+		);
 	} catch (err) {
 		console.error("getMovies error:", err.message);
-		return respond(res, 500, "Failed to fetch movies", []);
+		return respondObject(res, 500, "Failed to fetch movies", null);
 	}
 };
 

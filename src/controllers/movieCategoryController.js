@@ -1,21 +1,35 @@
 const MovieCategory = require("../models/movieCategoryModel");
 const Movie = require("../models/movieModel");
-const { respond, respondObject } = require("../helpers/response");
-const { parseActiveFlag } = require("../helpers/common");
+const { respondObject, respondPagination } = require("../helpers/response");
 
-// GET /api/movie-categories?active=1
+// GET /api/movie-categories?page=1&limit=20
 exports.getCategories = async (req, res) => {
 	try {
-		const isActive = parseActiveFlag(req.query.active, true);
-		const categories = await MovieCategory.list({ isActive });
-		return respond(res, 200, "success", categories, "Movie categories");
+		const page = Number.parseInt(req.query.page, 10) || 1;
+		const limit = Number.parseInt(req.query.limit, 10) || 20;
+		const offset = Math.max((page - 1) * limit, 0);
+
+		const result = await MovieCategory.list({ offset, limit });
+		return respondPagination(
+			res,
+			200,
+			"success",
+			result.items,
+			{
+				page,
+				offset,
+				limit,
+				total: Number(result.total) || 0,
+			},
+			"Movie categories",
+		);
 	} catch (err) {
 		console.error("getCategories error:", err.message);
-		return respond(res, 500, "Failed to fetch categories", []);
+		return respondObject(res, 500, "Failed to fetch categories", null);
 	}
 };
 
-// GET /api/movie-categories/:uuid/movies
+// GET /api/movie-categories/:uuid/movies?page=1&limit=20
 exports.getMoviesByCategory = async (req, res) => {
 	try {
 		const { uuid } = req.params;
@@ -24,17 +38,26 @@ exports.getMoviesByCategory = async (req, res) => {
 		const category = await MovieCategory.getByUuid(uuid);
 		if (!category) return respondObject(res, 404, "Category not found", null);
 
-		const isActive = parseActiveFlag(req.query.active, true);
-		const movies = await Movie.list({ isActive, categoryUuid: uuid });
-		return respond(
+		const page = Number.parseInt(req.query.page, 10) || 1;
+		const limit = Number.parseInt(req.query.limit, 10) || 20;
+		const offset = Math.max((page - 1) * limit, 0);
+
+		const result = await Movie.list({ categoryUuid: uuid, offset, limit });
+		return respondPagination(
 			res,
 			200,
 			"success",
-			movies.map(require("./movieController").mapMovie),
+			result.items.map(require("./movieController").mapMovie),
+			{
+				page,
+				offset,
+				limit,
+				total: Number(result.total) || 0,
+			},
 			"Movies by category",
 		);
 	} catch (err) {
 		console.error("getMoviesByCategory error:", err.message);
-		return respond(res, 500, "Failed to fetch movies by category", []);
+		return respondObject(res, 500, "Failed to fetch movies by category", null);
 	}
 };

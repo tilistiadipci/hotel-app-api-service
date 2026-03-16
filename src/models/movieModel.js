@@ -19,7 +19,13 @@ const baseSelect = `
 	LEFT JOIN ${CATEGORY_TABLE} mc ON mc.id = mcr.category_id
 `;
 
-const list = async ({ isActive = true, categoryUuid, q } = {}) => {
+const list = async ({
+	isActive = true,
+	categoryUuid,
+	q,
+	offset = 0,
+	limit = 20,
+} = {}) => {
 	const conditions = ["m.deleted_at IS NULL"];
 	const params = [];
 
@@ -43,10 +49,30 @@ const list = async ({ isActive = true, categoryUuid, q } = {}) => {
 	if (conditions.length) {
 		sql += ` WHERE ${conditions.join(" AND ")}`;
 	}
-	sql += " GROUP BY m.id ORDER BY m.title ASC";
+	const safeLimit = Number.isFinite(Number(limit)) ? Number(limit) : 20;
+	const safeOffset = Number.isFinite(Number(offset)) ? Number(offset) : 0;
+	sql += ` GROUP BY m.id ORDER BY m.title ASC LIMIT ${safeLimit} OFFSET ${safeOffset}`;
 
 	const [rows] = await pool.execute(sql, params);
-	return rows;
+	const [countRows] = await pool.execute(
+		`
+		SELECT COUNT(*) AS total
+		FROM (
+			SELECT m.id
+			FROM ${MOVIE_TABLE} m
+			LEFT JOIN ${REL_TABLE} mcr ON mcr.movie_id = m.id
+			LEFT JOIN ${CATEGORY_TABLE} mc ON mc.id = mcr.category_id
+			${conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""}
+			GROUP BY m.id
+		) grouped_movies
+		`,
+		params,
+	);
+
+	return {
+		items: rows,
+		total: countRows[0]?.total || 0,
+	};
 };
 
 const getByUuid = async (uuid) => {
