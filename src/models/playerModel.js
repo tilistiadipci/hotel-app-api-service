@@ -118,6 +118,7 @@ const getDetailByUuid = async (uuid) => {
 	const [rows] = await pool.execute(
 		`SELECT
 			p.*,
+			b.player_id AS booking_player_id,
 			b.guest_name,
 			t.id AS theme_ref_id,
 			t.uuid AS theme_ref_uuid,
@@ -169,6 +170,7 @@ const getDetailBySerial = async (serial) => {
 	const [rows] = await pool.execute(
 		`SELECT
 			p.*,
+			b.player_id AS booking_player_id,
 			b.guest_name,
 			t.id AS theme_ref_id,
 			t.uuid AS theme_ref_uuid,

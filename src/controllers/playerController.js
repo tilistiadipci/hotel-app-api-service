@@ -109,6 +109,10 @@ const getPlayerTokenBySerial = async (serial, res) => {
 		return respondObject(res, 404, "Player not found", null);
 	}
 
+	if (!rows[0].booking_player_id) {
+		return respondObject(res, 404, "Player belum checkin", null);
+	}
+
 	return respondObject(
 		res,
 		200,

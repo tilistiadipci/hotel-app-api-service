@@ -244,7 +244,7 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/songs",
+              "raw": "{{urlhotelapp}}/api/songs?page=1&limit=20&q=menunggu",
               "host": [
                 "{{urlhotelapp}}"
               ],
@@ -254,20 +254,101 @@
               ],
               "query": [
                 {
-                  "key": "artist_uuid",
-                  "value": "",
-                  "disabled": true
+                  "key": "page",
+                  "value": "1"
                 },
                 {
-                  "key": "album_uuid",
-                  "value": "",
-                  "disabled": true
+                  "key": "limit",
+                  "value": "20"
                 },
                 {
-                  "key": "active",
-                  "value": "",
-                  "description": "0 or 1",
-                  "disabled": true
+                  "key": "q",
+                  "value": "menunggu"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Album List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "ln03lahd0kkbygyr2dmshcjjtbclvwbnjgogp0tp",
+                "type": "text"
+              },
+              {
+                "key": "x-player-license",
+                "value": "PL001",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/songs/albums?album_name=BINTANG&limit=10&page=1",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "songs",
+                "albums"
+              ],
+              "query": [
+                {
+                  "key": "album_name",
+                  "value": "BINTANG"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Songs By Album",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-api-key",
+                "value": "ln03lahd0kkbygyr2dmshcjjtbclvwbnjgogp0tp",
+                "type": "text"
+              },
+              {
+                "key": "x-player-license",
+                "value": "PL001",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{urlhotelapp}}/api/songs/albums/f007caf3-0c10-4031-91eb-afc39ef5844b?page=1&limit=10",
+              "host": [
+                "{{urlhotelapp}}"
+              ],
+              "path": [
+                "api",
+                "songs",
+                "albums",
+                "f007caf3-0c10-4031-91eb-afc39ef5844b"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
                 },
                 {
                   "key": "q",
@@ -297,14 +378,14 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/songs/849133fe-cc60-4162-a400-5989c0de164e",
+              "raw": "{{urlhotelapp}}/api/songs/ad64a3ff-d54e-47c7-adf5-f888f7a44b32",
               "host": [
                 "{{urlhotelapp}}"
               ],
               "path": [
                 "api",
                 "songs",
-                "849133fe-cc60-4162-a400-5989c0de164e"
+                "ad64a3ff-d54e-47c7-adf5-f888f7a44b32"
               ]
             }
           },
@@ -332,7 +413,7 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/movies",
+              "raw": "{{urlhotelapp}}/api/movies?page=1&limit=20",
               "host": [
                 "{{urlhotelapp}}"
               ],
@@ -343,14 +424,22 @@
               "query": [
                 {
                   "key": "category_uuid",
-                  "value": "",
+                  "value": "...",
                   "disabled": true
                 },
                 {
-                  "key": "active",
-                  "value": "",
-                  "description": "0 or 1",
+                  "key": "q",
+                  "value": "title",
+                  "description": "title movie",
                   "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
                 }
               ]
             }
@@ -364,19 +453,24 @@
             "header": [
               {
                 "key": "x-api-key",
-                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "value": "ln03lahd0kkbygyr2dmshcjjtbclvwbnjgogp0tp",
+                "type": "text"
+              },
+              {
+                "key": "x-player-license",
+                "value": "PL001",
                 "type": "text"
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/movies/20e7ad85-50b1-4a75-8a8d-fb88b84405a4",
+              "raw": "{{urlhotelapp}}/api/movies/aaa82de9-2d20-4a8a-ac9c-8c6a1b31a413",
               "host": [
                 "{{urlhotelapp}}"
               ],
               "path": [
                 "api",
                 "movies",
-                "20e7ad85-50b1-4a75-8a8d-fb88b84405a4"
+                "aaa82de9-2d20-4a8a-ac9c-8c6a1b31a413"
               ]
             }
           },
@@ -404,7 +498,7 @@
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/movie-categories",
+              "raw": "{{urlhotelapp}}/api/movie-categories?page=1&limit=20",
               "host": [
                 "{{urlhotelapp}}"
               ],
@@ -413,6 +507,14 @@
                 "movie-categories"
               ],
               "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
                 {
                   "key": "active",
                   "value": "",
@@ -431,20 +533,35 @@
             "header": [
               {
                 "key": "x-api-key",
-                "value": "y0zr3hl33boako2pm90fyajmzmqubcec",
+                "value": "ln03lahd0kkbygyr2dmshcjjtbclvwbnjgogp0tp",
+                "type": "text"
+              },
+              {
+                "key": "x-player-license",
+                "value": "PL001",
                 "type": "text"
               }
             ],
             "url": {
-              "raw": "{{urlhotelapp}}/api/movie-categories/bd06db9c-d9fd-46f4-95cd-8d698c7733dc/movies",
+              "raw": "{{urlhotelapp}}/api/movie-categories/d0c9f8a5-e9f4-4c2c-b42d-3f1be38b5285/movies?page=1&limit=20",
               "host": [
                 "{{urlhotelapp}}"
               ],
               "path": [
                 "api",
                 "movie-categories",
-                "bd06db9c-d9fd-46f4-95cd-8d698c7733dc",
+                "d0c9f8a5-e9f4-4c2c-b42d-3f1be38b5285",
                 "movies"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
               ]
             }
           },

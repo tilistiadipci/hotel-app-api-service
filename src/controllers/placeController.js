@@ -13,7 +13,7 @@ const mapPlace = (row, { includeQr = false } = {}) => {
 	};
 
 	if (includeQr) {
-		mapped.qr_code_image = `/api/places/${row.uuid}/qr`;
+		mapped.qr_code_image = `${process.env.APP_URL}/api/places/${row.uuid}/qr`;
 	}
 
 	return mapped;
@@ -29,7 +29,7 @@ exports.getPlaces = async (req, res) => {
 		};
 
 		const places = await Place.list(filters);
-		return respond(res, 200, "success", places.map((p) => mapPlace(p)), "Place list");
+		return respond(res, 200, "success", places.map((p) => mapPlace(p, { includeQr: true })), "Place list");
 	} catch (err) {
 		console.error("getPlaces error:", err.message);
 		return respond(res, 500, "Failed to fetch places", []);
