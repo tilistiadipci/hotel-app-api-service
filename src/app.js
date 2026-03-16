@@ -29,6 +29,10 @@ const allowAnonymous = require("./middlewares/allowAnonymous");
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (_req, res) => {
+	res.status(404).type("text/plain").send("API not found");
+});
+
 // Media routes now handle auth per-route (see mediaRoutes)
 app.use("/api/media", mediaRoutes);
 
@@ -40,8 +44,8 @@ app.use("/api/menu-transactions/payment-finish", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-page", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-finish", allowAnonymous);
 
-// Other routes: protected
-app.use(apiKeyAuth);
+// Other API routes: protected
+app.use("/api", apiKeyAuth);
 app.use("/api/auth", authRoutes);
 app.use("/api/channels", channelRoutes);
 app.use("/api/players", playerRoutes);
