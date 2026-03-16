@@ -36,6 +36,8 @@ module.exports = async (req, res, next) => {
 			return respond(res, 401, "player unregistered license", []);
 		}
 
+		// TODO: player not checkin can't use API
+
 		req.apiKey = {
 			key: apiKey,
 			playerId: player.id,
