@@ -24,6 +24,7 @@ const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
 const menuTransactionRoutes = require("./routes/menuTransactionRoutes");
 const runningTextRoutes = require("./routes/runningTextRoutes");
+const weatherRoutes = require("./routes/weatherRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
 
@@ -44,6 +45,7 @@ app.use("/api/menu-transactions/notifications/midtrans", allowAnonymous);
 app.use("/api/menu-transactions/payment-finish", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-page", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-finish", allowAnonymous);
+app.use("/api/weather", allowAnonymous);
 
 // Other API routes: protected
 app.use("/api", apiKeyAuth);
@@ -63,6 +65,7 @@ app.use("/api/menu-categories", menuCategoryRoutes);
 app.use("/api/menu-items", menuItemRoutes);
 app.use("/api/menu-transactions", menuTransactionRoutes);
 app.use("/api/running-texts", runningTextRoutes);
+app.use("/api/weather", weatherRoutes);
 
 socket.init(server);
 
