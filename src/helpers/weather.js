@@ -82,6 +82,17 @@ const WEATHER_MAP = {
 	99: "Badai petir ekstrem",
 };
 
+function getWeatherByTemp(temp) {
+	if (temp >= 34) return "Panas terik";
+	if (temp >= 30) return "Cerah panas";
+	if (temp >= 27) return "Cerah";
+	if (temp >= 24) return "Cerah berawan";
+	if (temp >= 22) return "Berawan";
+	if (temp >= 20) return "Sejuk";
+
+	return "Dingin";
+}
+
 const normalizeCoord = (value, fallback) => {
 	const parsed = Number.parseFloat(value);
 	return Number.isFinite(parsed) ? parsed : fallback;
@@ -97,11 +108,7 @@ function validateCoord(lat, lon) {
 
 function mapProvinceJakarta(text, country) {
 	// jika ada kata mengandung Jakarta maka return dki jakarta
-	return text
-		.toLowerCase()
-		.includes("jakarta")
-		? "DKI Jakarta"
-		: country;
+	return text.toLowerCase().includes("jakarta") ? "DKI Jakarta" : country;
 }
 
 async function getLocation(lat, lon) {
@@ -132,7 +139,12 @@ async function getLocation(lat, lon) {
 		const location = {
 			city: addr.city || addr.town || addr.village || addr.county || null,
 			district: addr.suburb || addr.village || addr.county || null,
-			province: addr.state || mapProvinceJakarta(addr.city, addr.country) || addr.region  || addr.country || null,
+			province:
+				addr.state ||
+				mapProvinceJakarta(addr.city, addr.country) ||
+				addr.region ||
+				addr.country ||
+				null,
 			country: addr.country || null,
 		};
 
@@ -190,11 +202,13 @@ const getWeather = async ({ lat, lon }) => {
 			getLocation(latitude, longitude),
 		]);
 
+		let weatherValue = getWeatherByTemp(weatherData.temperature_2m);
 		return {
 			latitude,
 			longitude,
 			temperature: weatherData.temperature_2m ?? null,
-			weather: WEATHER_MAP[weatherData.weathercode] || "Tidak diketahui",
+			// weather: WEATHER_MAP[weatherData.weathercode] || "Tidak diketahui",
+			weather: weatherValue,
 			address: location,
 		};
 	} catch (err) {
