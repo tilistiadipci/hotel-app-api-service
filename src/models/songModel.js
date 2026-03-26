@@ -4,6 +4,7 @@ const TABLE = "songs";
 const MEDIA_TABLE = "medias";
 const ARTIST_TABLE = "artists";
 const ALBUM_TABLE = "albums";
+const PLAYLIST_TABLE = "song_playlists";
 
 // List songs with optional filters; joins artists and albums
 const list = async ({
@@ -35,11 +36,14 @@ const list = async ({
 			ar.name AS artist_name,
 			al.uuid AS album_uuid,
 			al.title AS album_title,
+			sp.uuid AS song_playlist_uuid,
+			sp.name AS song_playlist_name,
 			m.storage_path AS image_path,
 			ma.storage_path AS audio_path
 		FROM ${TABLE} s
 		LEFT JOIN ${ARTIST_TABLE} ar ON ar.id = s.artist_id
 		LEFT JOIN ${ALBUM_TABLE} al ON al.id = s.album_id
+		LEFT JOIN ${PLAYLIST_TABLE} sp ON sp.id = s.song_playlist_id
 		LEFT JOIN ${MEDIA_TABLE} m ON m.id = s.image_id
 		LEFT JOIN ${MEDIA_TABLE} ma ON ma.id = s.song_id
 	`;
@@ -76,11 +80,14 @@ const getByUuid = async (uuid) => {
 			ar.name AS artist_name,
 			al.uuid AS album_uuid,
 			al.title AS album_title,
+			sp.uuid AS song_playlist_uuid,
+			sp.name AS song_playlist_name,
 			m.storage_path AS image_path,
 			ma.storage_path AS audio_path
 		FROM ${TABLE} s
 		LEFT JOIN ${ARTIST_TABLE} ar ON ar.id = s.artist_id
 		LEFT JOIN ${ALBUM_TABLE} al ON al.id = s.album_id
+		LEFT JOIN ${PLAYLIST_TABLE} sp ON sp.id = s.song_playlist_id
 		LEFT JOIN ${MEDIA_TABLE} m ON m.id = s.image_id
 		LEFT JOIN ${MEDIA_TABLE} ma ON ma.id = s.song_id
 		WHERE s.uuid = ? AND s.deleted_at IS NULL
@@ -202,11 +209,14 @@ const listByAlbumUuid = async ({
 			ar.name AS artist_name,
 			al.uuid AS album_uuid,
 			al.title AS album_title,
+			sp.uuid AS song_playlist_uuid,
+			sp.name AS song_playlist_name,
 			m.storage_path AS image_path,
 			ma.storage_path AS audio_path
 		FROM ${TABLE} s
 		LEFT JOIN ${ARTIST_TABLE} ar ON ar.id = s.artist_id
 		LEFT JOIN ${ALBUM_TABLE} al ON al.id = s.album_id
+		LEFT JOIN ${PLAYLIST_TABLE} sp ON sp.id = s.song_playlist_id
 		LEFT JOIN ${MEDIA_TABLE} m ON m.id = s.image_id
 		LEFT JOIN ${MEDIA_TABLE} ma ON ma.id = s.song_id
 		${whereSql}
