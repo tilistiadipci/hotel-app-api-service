@@ -1,14 +1,14 @@
 const axios = require("axios");
 
-// ================= CONFIG =================
+// https://api.bmkg.go.id/publik/prakiraan-cuaca?adm4=31.71.01.1001
+
+// list kode wilayah
+// https://erlange.github.io/Kodepos-Wilayah-Indonesia/
+
 const DEFAULT = {
-	lat: parseFloat(process.env.DEFAULT_LAT) || -6.144829154721147,
-	lon: parseFloat(process.env.DEFAULT_LON) || 106.81914314212021,
+	adm4: process.env.DEFAULT_ADM4,
 };
 
-const CACHE_TTL = 5 * 60 * 1000; // 5 menit
-
-// ================= AXIOS INSTANCE =================
 const http = axios.create({
 	timeout: 5000,
 	headers: {
@@ -17,172 +17,15 @@ const http = axios.create({
 	},
 });
 
-// ================= CACHE =================
-const weatherCache = new Map();
-const locationCache = new Map();
-
-function getCache(cache, key) {
-	const item = cache.get(key);
-	if (!item) return null;
-
-	const isExpired = Date.now() - item.timestamp > CACHE_TTL;
-	if (isExpired) {
-		cache.delete(key);
-		return null;
-	}
-
-	return item.data;
-}
-
-function setCache(cache, key, data) {
-	cache.set(key, {
-		data,
-		timestamp: Date.now(),
-	});
-}
-
-// ================= WEATHER MAP =================
-const WEATHER_MAP = {
-	0: "Cerah",
-	1: "Sebagian cerah",
-	2: "Berawan",
-	3: "Cerah berawan",
-
-	45: "Kabut",
-	48: "Kabut tebal",
-
-	51: "Gerimis ringan",
-	53: "Gerimis sedang",
-	55: "Gerimis lebat",
-
-	56: "Gerimis ringan",
-	57: "Gerimis lebat",
-
-	61: "Hujan ringan",
-	63: "Hujan sedang",
-	65: "Hujan lebat",
-
-	66: "Hujan ringan",
-	67: "Hujan lebat",
-
-	71: "Salju ringan",
-	73: "Salju sedang",
-	75: "Salju lebat",
-	77: "Butiran salju",
-
-	80: "Hujan ringan",
-	81: "Hujan sedang",
-	82: "Hujan lebat",
-
-	85: "Salju ringan",
-	86: "Salju lebat",
-
-	95: "Badai petir",
-	96: "Badai petir + hujan es",
-	99: "Badai petir ekstrem",
-};
-
-function getWeatherByTemp(temp) {
-	if (temp >= 34) return "Panas terik";
-	if (temp >= 30) return "Cerah panas";
-	if (temp >= 27) return "Cerah";
-	if (temp >= 24) return "Cerah berawan";
-	if (temp >= 22) return "Berawan";
-	if (temp >= 20) return "Sejuk";
-
-	return "Dingin";
-}
-
-const normalizeCoord = (value, fallback) => {
-	const parsed = Number.parseFloat(value);
-	return Number.isFinite(parsed) ? parsed : fallback;
-};
-
-const getKey = (lat, lon) => `${lat.toFixed(6)},${lon.toFixed(6)}`;
-
-function validateCoord(lat, lon) {
-	if (Math.abs(lat) > 90 || Math.abs(lon) > 180) {
-		throw new Error("Invalid coordinates");
-	}
-}
-
-function mapProvinceJakarta(text, country) {
-	// jika ada kata mengandung Jakarta maka return dki jakarta
-	return text.toLowerCase().includes("jakarta") ? "DKI Jakarta" : country;
-}
-
-async function getLocation(lat, lon) {
-	validateCoord(lat, lon);
-
-	const key = getKey(lat, lon);
-
-	const cached = getCache(locationCache, key);
-	if (cached) return cached;
-
+async function getWeatherData(adm4) {
 	try {
-		const res = await http.get(
-			"https://nominatim.openstreetmap.org/reverse",
-			{
-				params: {
-					lat,
-					lon,
-					format: "json",
-					addressdetails: 1,
-				},
-			},
-		);
-
-		const addr = res.data.address || {};
-
-		console.log("RAW ADDRESS:", JSON.stringify(addr, null, 2));
-
-		const location = {
-			city: addr.city || addr.town || addr.village || addr.county || null,
-			district: addr.suburb || addr.village || addr.county || null,
-			province:
-				addr.state ||
-				mapProvinceJakarta(addr.city, addr.country) ||
-				addr.region ||
-				addr.country ||
-				null,
-			country: addr.country || null,
-		};
-
-		setCache(locationCache, key, location);
-
-		return location;
-	} catch (err) {
-		console.error("getLocation error:", err.message);
-
-		return {
-			city: null,
-			district: null,
-			province: null,
-			country: null,
-		};
-	}
-}
-
-async function getWeatherData(lat, lon) {
-	validateCoord(lat, lon);
-
-	const key = getKey(lat, lon);
-
-	const cached = getCache(weatherCache, key);
-	if (cached) return cached;
-
-	try {
-		const res = await http.get("https://api.open-meteo.com/v1/forecast", {
+		const res = await http.get(`https://api.bmkg.go.id/publik/prakiraan-cuaca`, {
 			params: {
-				latitude: lat,
-				longitude: lon,
-				current: "temperature_2m,weathercode",
+				adm4: adm4,
 			},
 		});
 
-		const data = res.data?.current || {};
-
-		setCache(weatherCache, key, data);
+		const data = res.data?.data || {};
 
 		return data;
 	} catch (err) {
@@ -192,40 +35,36 @@ async function getWeatherData(lat, lon) {
 }
 
 // ================= MAIN =================
-const getWeather = async ({ lat, lon }) => {
-	const latitude = normalizeCoord(lat, DEFAULT.lat);
-	const longitude = normalizeCoord(lon, DEFAULT.lon);
+const getWeather = async ({ adm4 }) => {
+	let administrasiWilayah4 = adm4 || DEFAULT.adm4;
 
 	try {
-		const [weatherData, location] = await Promise.all([
-			getWeatherData(latitude, longitude),
-			getLocation(latitude, longitude),
+		const [weatherData] = await Promise.all([
+			getWeatherData(administrasiWilayah4),
 		]);
 
-		let weatherValue = getWeatherByTemp(weatherData.temperature_2m);
+		if (!weatherData || weatherData.length === 0) return {};
+
+		const lokasi = weatherData[0]?.lokasi;
+		const cuaca = weatherData[0]?.cuaca[0][0];
+
+		// console.log("weatherData:", weatherData);
+		// console.log("lokasi:", lokasi);
+		// console.log("cuaca:", cuaca);
+
 		return {
-			latitude,
-			longitude,
-			temperature: weatherData.temperature_2m ?? null,
-			// weather: WEATHER_MAP[weatherData.weathercode] || "Tidak diketahui",
-			weather: weatherValue,
-			address: location,
+			latitude: lokasi.lat,
+			longitude: lokasi.lon,
+			temperature: cuaca.t ?? null,
+			weather: cuaca.weather_desc || "Tidak diketahui",
+			weather_en: cuaca.weather_desc_en || "Unknown",
+			weather_icon: cuaca.image,
+			address: lokasi,
 		};
 	} catch (err) {
 		console.error("getWeather main error:", err.message);
 
-		return {
-			latitude,
-			longitude,
-			temperature: null,
-			weather: "Tidak diketahui",
-			address: {
-				city: null,
-				district: null,
-				province: null,
-				country: null,
-			},
-		};
+		return {};
 	}
 };
 
