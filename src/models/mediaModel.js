@@ -31,4 +31,10 @@ const list = async (filters = {}) => {
 	return rows;
 };
 
-module.exports = { list };
+const getMediaById = async (id) => {
+	const sql = `SELECT * FROM ${TABLE} WHERE id = ? AND deleted_at IS NULL`;
+	const [rows] = await pool.execute(sql, [id]);
+	return rows[0];
+};
+
+module.exports = { list, getMediaById };

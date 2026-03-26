@@ -1,28 +1,39 @@
 const Player = require("../models/playerModel");
+const Setting = require("../models/settingModel");
+const Media = require("../models/mediaModel");
 const { respond, respondObject } = require("../helpers/response");
 const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
 
 // Build reusable filters from query params
 const buildFilters = (req) => {
 	const rawActive = req.query.is_active ?? req.query.active;
-	const isActive = rawActive === undefined ? undefined : parseActiveFlag(rawActive, true);
+	const isActive =
+		rawActive === undefined ? undefined : parseActiveFlag(rawActive, true);
 	const serial = req.query.serial || req.query.q || undefined;
 
 	return { isActive, serial };
 };
 
-const mapPlayerDetail = (rows) => {
+const mapPlayerDetail = (rows, settings) => {
 	const [firstRow] = rows;
 	const details = rows
 		.filter((row) => row.theme_detail_id)
-		.map((row) => ({
-			id: row.theme_detail_id,
-			uuid: row.theme_detail_uuid,
-			key: row.theme_detail_key,
-			value: row.theme_detail_value,
-			created_at: row.theme_detail_created_at,
-			updated_at: row.theme_detail_updated_at,
-		}));
+		.reduce((acc, row) => {
+			let value = row.theme_detail_value;
+
+			// handle image
+			if (row.theme_detail_key === "image_id_1" && row.media_path_1) {
+				value = buildMediaUrl("image", row.media_path_1);
+			}
+
+			if (row.theme_detail_key === "image_id_2" && row.media_path_2) {
+				value = buildMediaUrl("image", row.media_path_2);
+			}
+
+			acc[row.theme_detail_key] = value;
+
+			return acc;
+		}, {});
 
 	return {
 		id: firstRow.id,
@@ -40,6 +51,7 @@ const mapPlayerDetail = (rows) => {
 		deleted_at: firstRow.deleted_at,
 		alias: firstRow.alias,
 		guest_name: firstRow.guest_name,
+		settings: settings,
 		theme: firstRow.theme_ref_id
 			? {
 					id: firstRow.theme_ref_id,
@@ -75,12 +87,8 @@ exports.getPlayers = async (req, res) => {
 		}));
 
 		const sanitizedPayload = payload.map(
-			({
-				theme_ref_id,
-				theme_ref_uuid,
-				theme_ref_name,
-				...player
-			}) => player,
+			({ theme_ref_id, theme_ref_uuid, theme_ref_name, ...player }) =>
+				player,
 		);
 
 		return respond(res, 200, "success", sanitizedPayload, "Player list");
@@ -113,11 +121,23 @@ const getPlayerTokenBySerial = async (serial, res) => {
 		return respondObject(res, 404, "Player belum checkin", null);
 	}
 
+	const settings = await Setting.getAllWithMedia();
+	const mapSetting = settings.reduce((acc, setting) => {
+		let value = setting.value;
+
+		if (setting.key === "general_app_logo" && setting.storage_path) {
+			value = buildMediaUrl("image", setting.storage_path);
+		}
+
+		acc[setting.key] = value;
+		return acc;
+	}, {});
+
 	return respondObject(
 		res,
 		200,
 		"success",
-		mapPlayerDetail(rows),
+		mapPlayerDetail(rows, mapSetting),
 		"Player token",
 	);
 };

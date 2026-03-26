@@ -179,6 +179,8 @@ const getDetailBySerial = async (serial) => {
 			t.is_default AS theme_ref_is_default,
 			t.image_id AS theme_ref_image_id,
 			m.storage_path AS theme_ref_image_path,
+			md1.storage_path AS media_path_1,
+			md2.storage_path AS media_path_2,
 			td.id AS theme_detail_id,
 			td.uuid AS theme_detail_uuid,
 			td.key AS theme_detail_key,
@@ -208,8 +210,27 @@ const getDetailBySerial = async (serial) => {
 		LEFT JOIN ${MEDIA_TABLE} m
 			ON m.id = t.image_id
 			AND m.deleted_at IS NULL
+		
 		LEFT JOIN ${THEME_DETAIL_TABLE} td
 			ON td.theme_id = t.id
+		
+		-- image 1
+		LEFT JOIN ${THEME_DETAIL_TABLE} td1
+			ON td1.theme_id = t.id
+			AND td1.key = 'image_id_1'
+
+		LEFT JOIN ${MEDIA_TABLE} md1
+			ON md1.id = td1.value
+			AND md1.deleted_at IS NULL
+
+		-- image 2
+		LEFT JOIN ${THEME_DETAIL_TABLE} td2
+			ON td2.theme_id = t.id
+			AND td2.key = 'image_id_2'
+
+		LEFT JOIN ${MEDIA_TABLE} md2
+			ON md2.id = td2.value
+			AND md2.deleted_at IS NULL
 		WHERE p.serial = ?
 			AND p.is_active = 1
 			AND p.deleted_at IS NULL
