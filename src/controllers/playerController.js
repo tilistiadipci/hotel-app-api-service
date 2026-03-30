@@ -129,6 +129,10 @@ const getPlayerTokenBySerial = async (serial, res) => {
 			value = buildMediaUrl("image", setting.storage_path);
 		}
 
+		if (setting.key === "general_app_logo2" && setting.storage_path2) {
+			value = buildMediaUrl("image", setting.storage_path2);
+		}
+
 		acc[setting.key] = value;
 		return acc;
 	}, {});

@@ -35,14 +35,21 @@ const getAllWithMedia = async () => {
 			s.id,
 			s.key,
 			s.value,
-			m.storage_path
+			m.storage_path,
+			m2.storage_path as storage_path2
 		FROM settings s
 		LEFT JOIN medias m 
 			ON s.value = m.id 
 			AND s.key = 'general_app_logo'
 			AND m.deleted_at IS NULL
+		LEFT JOIN medias m2
+			ON s.value = m2.id
+			AND s.key = 'general_app_logo2'
+			AND m2.deleted_at IS NULL
 		WHERE s.deleted_at IS NULL
 	`;
+
+	console.log("Executing SQL:", sql);
 
 	const [rows] = await pool.query(sql);
 	return rows;
