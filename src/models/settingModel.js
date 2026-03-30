@@ -49,8 +49,6 @@ const getAllWithMedia = async () => {
 		WHERE s.deleted_at IS NULL
 	`;
 
-	console.log("Executing SQL:", sql);
-
 	const [rows] = await pool.query(sql);
 	return rows;
 };
