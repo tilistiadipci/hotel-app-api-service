@@ -24,6 +24,7 @@ const placeCategoryRoutes = require("./routes/placeCategoryRoutes");
 const menuCategoryRoutes = require("./routes/menuCategoryRoutes");
 const menuItemRoutes = require("./routes/menuItemRoutes");
 const menuTransactionRoutes = require("./routes/menuTransactionRoutes");
+const websocketRoutes = require("./routes/websocketRoutes");
 const runningTextRoutes = require("./routes/runningTextRoutes");
 const weatherRoutes = require("./routes/weatherRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
@@ -66,6 +67,7 @@ app.use("/api/place-categories", placeCategoryRoutes);
 app.use("/api/menu-categories", menuCategoryRoutes);
 app.use("/api/menu-items", menuItemRoutes);
 app.use("/api/menu-transactions", menuTransactionRoutes);
+app.use("/api/websocket", websocketRoutes);
 app.use("/api/running-texts", runningTextRoutes);
 app.use("/api/weather", weatherRoutes);
 

@@ -1,6 +1,6 @@
 const MenuTx = require("../models/menuTransactionModel");
 const Player = require("../models/playerModel");
-const socket = require("../helpers/socket");
+const websocketController = require("./websocketController");
 const { respond, respondObject } = require("../helpers/response");
 const { buildMediaUrl } = require("../helpers/common");
 const {
@@ -98,8 +98,7 @@ exports.createTransaction = async (req, res) => {
 			result.payment.payment_finish_url_local = `/api/menu-transactions/payment-finish?order_id=${encodeURIComponent(result.invoice_number)}`;
 		}
 
-		const io = socket.getIO();
-		io.emit("new-order", {
+		websocketController.emitNewOrder({
 			invoice_number: result.invoice_number,
 			status: result.status,
 			player_alias: player.alias,

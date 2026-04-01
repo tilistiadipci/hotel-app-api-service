@@ -114,6 +114,18 @@ const getByTokenAndSerial = async (token, serial) => {
 	return rows[0] || null;
 };
 
+const updateFcmTokenBySerial = async (serial, fcmToken) => {
+	const [result] = await pool.execute(
+		`UPDATE ${TABLE}
+		SET fcm_token = ?
+		WHERE serial = ?
+			AND deleted_at IS NULL`,
+		[fcmToken, serial],
+	);
+
+	return result;
+};
+
 const getDetailByUuid = async (uuid) => {
 	const [rows] = await pool.execute(
 		`SELECT
@@ -247,6 +259,7 @@ module.exports = {
 	getTokenBySerial,
 	getByUuid,
 	getByTokenAndSerial,
+	updateFcmTokenBySerial,
 	getDetailByUuid,
 	getDetailBySerial,
 };

@@ -97,7 +97,7 @@ exports.getPlayers = async (req, res) => {
 	}
 };
 
-const getPlayerTokenBySerial = async (serial, res) => {
+const getPlayerTokenBySerial = async (serial, fcmToken, res) => {
 	const player = await Player.getTokenBySerial(serial);
 	if (!player) {
 		return respondObject(res, 404, "Player not found", null);
@@ -120,6 +120,13 @@ const getPlayerTokenBySerial = async (serial, res) => {
 	if (!rows[0].booking_player_id) {
 		return respondObject(res, 404, "Player belum checkin", null);
 	}
+
+	// if (fcmToken) {
+	// 	await Player.updateFcmTokenBySerial(serial, fcmToken);
+	// 	rows.forEach((row) => {
+	// 		row.fcm_token = fcmToken;
+	// 	});
+	// }
 
 	const settings = await Setting.getAllWithMedia();
 	const mapSetting = settings.reduce((acc, setting) => {
@@ -146,16 +153,17 @@ const getPlayerTokenBySerial = async (serial, res) => {
 	);
 };
 
-// GET /api/players/:serial
+// GET /api/players/:serial?fcm=token
 exports.getPlayerTokenBySerial = async (req, res) => {
 	try {
 		const { serial } = req.params;
+		const fcmToken = req.query?.fcmtoken || null;
 
 		if (!serial) {
 			return respondObject(res, 400, "serial is required", null);
 		}
 
-		return getPlayerTokenBySerial(serial, res);
+		return getPlayerTokenBySerial(serial, fcmToken, res);
 	} catch (err) {
 		return respondObject(res, 500, err.message, null);
 	}
