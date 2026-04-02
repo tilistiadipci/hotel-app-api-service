@@ -135,7 +135,7 @@ const getItemsByUuids = async (uuids, conn) => {
 	if (!uuids || uuids.length === 0) return [];
 
 	const [rows] = await executor.query(
-		`SELECT id, uuid, name, price, discount_price, image_id
+		`SELECT id, uuid, menu_tenant_id, category_id, name, price, discount_price, image_id
 		FROM ${ITEM_TABLE}
 		WHERE uuid IN (?) AND deleted_at IS NULL`,
 		[uuids],
@@ -317,6 +317,8 @@ const createTransaction = async ({
 
 			return {
 				menuId: menu.id,
+				menuTenantId: menu.menu_tenant_id || null,
+				categoryId: menu.category_id || null,
 				menuName: menu.name,
 				price: unitPrice,
 				quantity: qty,
@@ -324,6 +326,19 @@ const createTransaction = async ({
 				notes,
 			};
 		});
+
+		const tenantIds = [
+			...new Set(
+				detailRows
+					.map((row) => row.menuTenantId)
+					.filter((tenantId) => tenantId !== null),
+			),
+		];
+		if (tenantIds.length > 1) {
+			throw new Error(
+				"Semua item dalam satu transaksi harus dari tenant yang sama",
+			);
+		}
 
 		const { taxAmount: taxVal, serviceAmount: serviceVal } =
 			await resolveChargeAmounts(totalAmount);
@@ -342,6 +357,7 @@ const createTransaction = async ({
 		const [txRes] = await conn.execute(
 			`INSERT INTO ${TX_TABLE} (
 				uuid,
+				menu_tenant_id,
 				player_id,
 				guest_name,
 				total_amount,
@@ -352,9 +368,10 @@ const createTransaction = async ({
 				payment_status,
 				status,
 				paid_at
-			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` ,
 			[
 				txUuid,
+				detailRows[0]?.menuTenantId || null,
 				playerId,
 				resolvedGuestName,
 				totalAmount,
@@ -372,6 +389,8 @@ const createTransaction = async ({
 
 		const detailValues = detailRows.map((r) => [
 			txId,
+			r.menuTenantId,
+			r.categoryId,
 			r.menuId,
 			r.menuName,
 			r.price,
@@ -384,6 +403,8 @@ const createTransaction = async ({
 		await conn.query(
 			`INSERT INTO ${DETAIL_TABLE} (
 				menu_transaction_id,
+				menu_tenant_id,
+				category_id,
 				menu_id,
 				menu_name,
 				price,
