@@ -3,16 +3,21 @@ const pool = require("../config/database");
 const TABLE = "menu_items";
 const CATEGORY_TABLE = "menu_categories";
 const MEDIA_TABLE = "medias";
+const TENANT_TABLE = "menu_tenants";
 
 const baseSelect = `
 	SELECT
 		mi.*,
 		mc.uuid AS category_uuid,
 		mc.name AS category_name,
-		m.storage_path AS image_path
+		m.storage_path AS image_path,
+		mi.menu_tenant_id AS tenant_id,
+		mt.name AS tenant_name,
+		mt.location AS tenant_location
 	FROM ${TABLE} mi
 	LEFT JOIN ${CATEGORY_TABLE} mc ON mc.id = mi.category_id
 	LEFT JOIN ${MEDIA_TABLE} m ON m.id = mi.image_id
+	LEFT JOIN ${TENANT_TABLE} mt ON mt.id = mi.menu_tenant_id
 `;
 
 const list = async ({ isAvailable, categoryId, q } = {}) => {

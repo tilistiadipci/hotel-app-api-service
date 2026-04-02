@@ -97,7 +97,12 @@ exports.getPlayers = async (req, res) => {
 	}
 };
 
-const getPlayerTokenBySerial = async (serial, fcmToken, res) => {
+const getPlayerTokenBySerial = async (
+	serial,
+	fcmToken,
+	skipCheckinValidation,
+	res,
+) => {
 	const player = await Player.getTokenBySerial(serial);
 	if (!player) {
 		return respondObject(res, 404, "Player not found", null);
@@ -117,7 +122,7 @@ const getPlayerTokenBySerial = async (serial, fcmToken, res) => {
 		return respondObject(res, 404, "Player not found", null);
 	}
 
-	if (!rows[0].booking_player_id) {
+	if (!skipCheckinValidation && !rows[0].booking_player_id) {
 		return respondObject(res, 404, "Player belum checkin", null);
 	}
 
@@ -153,17 +158,26 @@ const getPlayerTokenBySerial = async (serial, fcmToken, res) => {
 	);
 };
 
-// GET /api/players/:serial?fcm=token
+// GET /api/players/:serial?fcm=token&activation=1
 exports.getPlayerTokenBySerial = async (req, res) => {
 	try {
 		const { serial } = req.params;
 		const fcmToken = req.query?.fcmtoken || null;
+		const skipCheckinValidation = parseActiveFlag(
+			req.query?.activation,
+			false,
+		);
 
 		if (!serial) {
 			return respondObject(res, 400, "serial is required", null);
 		}
 
-		return getPlayerTokenBySerial(serial, fcmToken, res);
+		return getPlayerTokenBySerial(
+			serial,
+			fcmToken,
+			skipCheckinValidation,
+			res,
+		);
 	} catch (err) {
 		return respondObject(res, 500, err.message, null);
 	}
