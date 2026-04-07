@@ -38,7 +38,7 @@ const savePaymentGateway = async (menuTransactionId, paymentResult, conn) => {
 	if (!paymentResult || !menuTransactionId) return;
 
 	const executor = conn || pool;
-	// await ensurePaymentGatewayTable(executor);
+	await ensurePaymentGatewayTable(executor);
 
 	const payloadJson = JSON.stringify(paymentResult);
 	const [existingRows] = await executor.query(
