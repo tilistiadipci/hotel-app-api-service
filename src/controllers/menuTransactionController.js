@@ -92,19 +92,30 @@ exports.createTransaction = async (req, res) => {
 					: undefined,
 		});
 
-		if (result?.payment && result?.uuid) {
-			result.payment.payment_page_url_local = `/api/menu-transactions/${result.uuid}/payment-page`;
-			result.payment.snap_html_url = `/api/menu-transactions/${result.uuid}/payment-page`;
-			result.payment.payment_finish_url_local = `/api/menu-transactions/payment-finish?order_id=${encodeURIComponent(result.invoice_number)}`;
+		const responsePayload = {
+			...result,
+			service_charge: result?.service_amount ?? 0,
+		};
+
+		if (responsePayload?.payment && responsePayload?.uuid) {
+			responsePayload.payment.payment_page_url_local = `/api/menu-transactions/${responsePayload.uuid}/payment-page`;
+			responsePayload.payment.snap_html_url = `/api/menu-transactions/${responsePayload.uuid}/payment-page`;
+			responsePayload.payment.payment_finish_url_local = `/api/menu-transactions/payment-finish?order_id=${encodeURIComponent(responsePayload.invoice_number)}`;
 		}
 
 		websocketController.emitNewOrder({
-			invoice_number: result.invoice_number,
-			status: result.status,
+			invoice_number: responsePayload.invoice_number,
+			status: responsePayload.status,
 			player_alias: player.alias,
 		});
 
-		return respond(res, 201, "success", result, "Menu transaction created");
+		return respond(
+			res,
+			201,
+			"success",
+			responsePayload,
+			"Menu transaction created",
+		);
 	} catch (err) {
 		console.error("createTransaction error:", err.message);
 		const msg =

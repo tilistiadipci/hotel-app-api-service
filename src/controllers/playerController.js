@@ -145,6 +145,10 @@ const getPlayerTokenBySerial = async (
 			value = buildMediaUrl("image", setting.storage_path2);
 		}
 
+		if (setting.key === "firebase_credentials_json") {
+			value = setting.value ? JSON.parse(setting.value) : null;
+		}
+
 		acc[setting.key] = value;
 		return acc;
 	}, {});

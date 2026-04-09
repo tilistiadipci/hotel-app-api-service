@@ -7,6 +7,7 @@ const DETAIL_TABLE = "menu_transaction_details";
 const INVOICE_TABLE = "menu_transaction_invoices";
 const PAYMENT_GATEWAY_TABLE = "menu_transaction_payment_gateways";
 const ITEM_TABLE = "menu_items";
+const TENANT_TABLE = "menu_tenants";
 const MEDIA_TABLE = "medias";
 const BOOKING_TABLE = "bookings";
 
@@ -135,9 +136,21 @@ const getItemsByUuids = async (uuids, conn) => {
 	if (!uuids || uuids.length === 0) return [];
 
 	const [rows] = await executor.query(
-		`SELECT id, uuid, menu_tenant_id, category_id, name, price, discount_price, image_id
-		FROM ${ITEM_TABLE}
-		WHERE uuid IN (?) AND deleted_at IS NULL`,
+		`SELECT
+			mi.id,
+			mi.uuid,
+			mi.menu_tenant_id,
+			mi.category_id,
+			mi.name,
+			mi.price,
+			mi.discount_price,
+			mi.image_id,
+			COALESCE(mt.service_charge, 0) AS tenant_service_charge
+		FROM ${ITEM_TABLE} mi
+		LEFT JOIN ${TENANT_TABLE} mt
+			ON mt.id = mi.menu_tenant_id
+			AND mt.deleted_at IS NULL
+		WHERE mi.uuid IN (?) AND mi.deleted_at IS NULL`,
 		[uuids],
 	);
 
@@ -165,26 +178,18 @@ const isActiveSetting = (value) =>
 
 const roundCurrency = (value) => Math.round(Number(value) || 0);
 
-const resolveChargeAmounts = async (baseAmount) => {
+const resolveChargeAmounts = async ({ baseAmount, serviceAmount = 0 }) => {
 	const settingRows = await Setting.getByKeys([
 		"tax_percentage_grand_total_status",
 		"tax_percentage_grand_total",
-		"service_charge_status",
-		"service_charge_fixed",
 	]);
 
 	const settings = new Map(settingRows.map((row) => [row.key, row.value]));
 
-	const serviceEnabled = isActiveSetting(
-		settings.get("service_charge_status"),
-	);
 	const taxEnabled = isActiveSetting(
 		settings.get("tax_percentage_grand_total_status"),
 	);
 
-	const serviceAmount = serviceEnabled
-		? roundCurrency(settings.get("service_charge_fixed"))
-		: 0;
 	const taxableBase = Number(baseAmount);
 	const taxPercentage = taxEnabled
 		? Number(settings.get("tax_percentage_grand_total")) || 0
@@ -195,11 +200,11 @@ const resolveChargeAmounts = async (baseAmount) => {
 
 	return {
 		taxAmount,
-		serviceAmount,
+		serviceAmount: roundCurrency(serviceAmount),
 	};
 };
 
-const calculateTransaction = async ({ items }) => {
+const normalizeTransactionItems = (items) => {
 	if (!Array.isArray(items) || items.length === 0) {
 		throw new Error("items is required");
 	}
@@ -207,6 +212,7 @@ const calculateTransaction = async ({ items }) => {
 	const normalized = items.map((it) => ({
 		uuid: it.menu_item_uuid || it.menu_uuid || it.menuId || it.menu_id,
 		qty: Number(it.qty ?? it.quantity ?? 0),
+		notes: it.notes || null,
 	}));
 
 	for (const it of normalized) {
@@ -216,8 +222,13 @@ const calculateTransaction = async ({ items }) => {
 		}
 	}
 
+	return normalized;
+};
+
+const buildTransactionItems = async (items, conn) => {
+	const normalized = normalizeTransactionItems(items);
 	const uuids = [...new Set(normalized.map((item) => item.uuid))];
-	const menus = await getItemsByUuids(uuids);
+	const menus = await getItemsByUuids(uuids, conn);
 	const menuMap = new Map(menus.map((menu) => [menu.uuid, menu]));
 
 	for (const uuid of uuids) {
@@ -228,17 +239,60 @@ const calculateTransaction = async ({ items }) => {
 
 	let subtotal = 0;
 
-	for (const item of normalized) {
-		const menu = menuMap.get(item.uuid);
+	const detailRows = normalized.map(({ uuid, qty, notes }) => {
+		const menu = menuMap.get(uuid);
 		const unitPrice =
 			menu.discount_price !== null && Number(menu.discount_price) > 0
 				? Number(menu.discount_price)
 				: Number(menu.price);
+		const lineSubtotal = unitPrice * qty;
 
-		subtotal += unitPrice * item.qty;
+		subtotal += lineSubtotal;
+
+		return {
+			menuId: menu.id,
+			menuTenantId: menu.menu_tenant_id || null,
+			categoryId: menu.category_id || null,
+			menuName: menu.name,
+			price: unitPrice,
+			quantity: qty,
+			subtotal: lineSubtotal,
+			notes,
+			tenantServiceCharge: Number(menu.tenant_service_charge) || 0,
+		};
+	});
+
+	const tenantIds = [
+		...new Set(
+			detailRows
+				.map((row) => row.menuTenantId)
+				.filter((tenantId) => tenantId !== null),
+		),
+	];
+
+	if (tenantIds.length > 1) {
+		throw new Error(
+			"Semua item dalam satu transaksi harus dari tenant yang sama",
+		);
 	}
 
-	const { taxAmount, serviceAmount } = await resolveChargeAmounts(subtotal);
+	return {
+		subtotal,
+		detailRows,
+		menuTenantId: tenantIds[0] || null,
+		serviceAmount: roundCurrency(detailRows[0]?.tenantServiceCharge || 0),
+	};
+};
+
+const calculateTransaction = async ({ items }) => {
+	const {
+		subtotal,
+		serviceAmount,
+	} = await buildTransactionItems(items);
+	const { taxAmount } = await resolveChargeAmounts({
+		baseAmount: subtotal,
+		serviceAmount,
+	});
 	const grandTotal = subtotal + taxAmount + serviceAmount;
 
 	return {
@@ -280,68 +334,16 @@ const createTransaction = async ({
 		if (!Array.isArray(items) || items.length === 0) {
 			throw new Error("items is required");
 		}
-
-		const normalized = items.map((it) => ({
-			uuid: it.menu_item_uuid || it.menu_uuid || it.menuId || it.menu_id,
-			qty: Number(it.qty ?? it.quantity ?? 0),
-			notes: it.notes || null,
-		}));
-
-		for (const it of normalized) {
-			if (!it.uuid) throw new Error("menu_item_uuid is required");
-			if (!Number.isFinite(it.qty) || it.qty <= 0) {
-				throw new Error(`Invalid qty for item ${it.uuid}`);
-			}
-		}
-
-		const uuids = [...new Set(normalized.map((x) => x.uuid))];
-		const menus = await getItemsByUuids(uuids, conn);
-		const menuMap = new Map(menus.map((m) => [m.uuid, m]));
-
-		for (const u of uuids) {
-			if (!menuMap.has(u)) throw new Error(`Menu item not found: ${u}`);
-		}
-
-		let totalAmount = 0;
-
-		const detailRows = normalized.map(({ uuid, qty, notes }) => {
-			const menu = menuMap.get(uuid);
-
-			const unitPrice =
-				menu.discount_price !== null && Number(menu.discount_price) > 0
-					? Number(menu.discount_price)
-					: Number(menu.price);
-
-			const subtotal = unitPrice * qty;
-			totalAmount += subtotal;
-
-			return {
-				menuId: menu.id,
-				menuTenantId: menu.menu_tenant_id || null,
-				categoryId: menu.category_id || null,
-				menuName: menu.name,
-				price: unitPrice,
-				quantity: qty,
-				subtotal,
-				notes,
-			};
+		const {
+			subtotal: totalAmount,
+			detailRows,
+			menuTenantId,
+			serviceAmount: serviceVal,
+		} = await buildTransactionItems(items, conn);
+		const { taxAmount: taxVal } = await resolveChargeAmounts({
+			baseAmount: totalAmount,
+			serviceAmount: serviceVal,
 		});
-
-		const tenantIds = [
-			...new Set(
-				detailRows
-					.map((row) => row.menuTenantId)
-					.filter((tenantId) => tenantId !== null),
-			),
-		];
-		if (tenantIds.length > 1) {
-			throw new Error(
-				"Semua item dalam satu transaksi harus dari tenant yang sama",
-			);
-		}
-
-		const { taxAmount: taxVal, serviceAmount: serviceVal } =
-			await resolveChargeAmounts(totalAmount);
 		const grandTotal = totalAmount + taxVal + serviceVal;
 		const txUuid = randomUUID();
 		const activeBooking = await getActiveBookingByPlayerId(playerId, conn);
@@ -371,7 +373,7 @@ const createTransaction = async ({
 			) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)` ,
 			[
 				txUuid,
-				detailRows[0]?.menuTenantId || null,
+				menuTenantId,
 				playerId,
 				resolvedGuestName,
 				totalAmount,
@@ -457,11 +459,16 @@ const createTransaction = async ({
 			uuid: txUuid,
 			invoice_uuid: invoiceUuid,
 			invoice_number: invoiceNumber,
+			menu_tenant_id: menuTenantId,
 			guest_name: resolvedGuestName,
 			total_amount: totalAmount,
 			tax_amount: taxVal,
 			service_amount: serviceVal,
 			grand_total: grandTotal,
+			payment_method: normalizedMethod,
+			payment_status: normalizedPaymentStatus,
+			status: normalizedStatus,
+			paid_at: resolvedPaidAt,
 			payment: paymentResult,
 		};
 	} catch (err) {
