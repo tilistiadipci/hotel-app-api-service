@@ -3,6 +3,12 @@ const Setting = require("../models/settingModel");
 const Media = require("../models/mediaModel");
 const { respond, respondObject } = require("../helpers/response");
 const { buildMediaUrl, parseActiveFlag } = require("../helpers/common");
+const {
+	buildMediaPathById,
+	collectImageDetailMediaIds,
+	isImageDetailKey,
+	mapImageDetailValue,
+} = require("../helpers/themeDetailMedia");
 
 // Build reusable filters from query params
 const buildFilters = (req) => {
@@ -14,20 +20,19 @@ const buildFilters = (req) => {
 	return { isActive, serial };
 };
 
-const mapPlayerDetail = (rows, settings) => {
+const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
 	const [firstRow] = rows;
 	const details = rows
 		.filter((row) => row.theme_detail_id)
 		.reduce((acc, row) => {
 			let value = row.theme_detail_value;
 
-			// handle image
-			if (row.theme_detail_key === "image_id_1" && row.media_path_1) {
-				value = buildMediaUrl("image", row.media_path_1);
-			}
-
-			if (row.theme_detail_key === "image_id_2" && row.media_path_2) {
-				value = buildMediaUrl("image", row.media_path_2);
+			if (isImageDetailKey(row.theme_detail_key)) {
+				value = mapImageDetailValue(
+					row.theme_detail_key,
+					value,
+					themeMediaPathById,
+				);
 			}
 
 			acc[row.theme_detail_key] = value;
@@ -133,7 +138,17 @@ const getPlayerTokenBySerial = async (
 	// 	});
 	// }
 
-	const settings = await Setting.getAllWithMedia();
+	const themeImageIds = collectImageDetailMediaIds(rows, {
+		keyField: "theme_detail_key",
+		valueField: "theme_detail_value",
+	});
+
+	const [settings, themeMediaRows] = await Promise.all([
+		Setting.getAllWithMedia(),
+		themeImageIds.length ? Media.getMediaByIds(themeImageIds) : [],
+	]);
+
+	const themeMediaPathById = buildMediaPathById(themeMediaRows);
 	const mapSetting = settings.reduce((acc, setting) => {
 		let value = setting.value;
 
@@ -145,8 +160,10 @@ const getPlayerTokenBySerial = async (
 			value = buildMediaUrl("image", setting.storage_path2);
 		}
 
+		// unset firebase_credentials_json value for security reason, 
+		// but still return null or object to avoid breaking change
 		if (setting.key === "firebase_credentials_json") {
-			value = setting.value ? JSON.parse(setting.value) : null;
+			value = setting.value ? {} : null;
 		}
 
 		acc[setting.key] = value;
@@ -157,7 +174,7 @@ const getPlayerTokenBySerial = async (
 		res,
 		200,
 		"success",
-		mapPlayerDetail(rows, mapSetting),
+		mapPlayerDetail(rows, mapSetting, themeMediaPathById),
 		"Player token",
 	);
 };

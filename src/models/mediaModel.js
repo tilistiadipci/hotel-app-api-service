@@ -37,4 +37,21 @@ const getMediaById = async (id) => {
 	return rows[0];
 };
 
-module.exports = { list, getMediaById };
+const getMediaByIds = async (ids = []) => {
+	const normalizedIds = [...new Set(ids.map(String).filter(Boolean))];
+	if (!normalizedIds.length) {
+		return [];
+	}
+
+	const placeholders = normalizedIds.map(() => "?").join(", ");
+	const sql = `
+		SELECT id, storage_path
+		FROM ${TABLE}
+		WHERE id IN (${placeholders})
+			AND deleted_at IS NULL
+	`;
+	const [rows] = await pool.execute(sql, normalizedIds);
+	return rows;
+};
+
+module.exports = { list, getMediaById, getMediaByIds };

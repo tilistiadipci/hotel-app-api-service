@@ -1,6 +1,13 @@
 const Theme = require("../models/themeModel");
+const Media = require("../models/mediaModel");
 const { respond, respondObject } = require("../helpers/response");
 const { buildMediaUrl } = require("../helpers/common");
+const {
+	buildMediaPathById,
+	collectImageDetailMediaIds,
+	isImageDetailKey,
+	mapImageDetailValue,
+} = require("../helpers/themeDetailMedia");
 
 const mapTheme = (row) => ({
 	...row,
@@ -34,13 +41,27 @@ exports.getThemeDetail = async (req, res) => {
 		}
 
 		const [firstRow] = rows;
+		const themeImageIds = collectImageDetailMediaIds(rows, {
+			keyField: "detail_key",
+			valueField: "detail_value",
+		});
+		const themeMediaRows = themeImageIds.length
+			? await Media.getMediaByIds(themeImageIds)
+			: [];
+		const themeMediaPathById = buildMediaPathById(themeMediaRows);
 		const details = rows
 			.filter((row) => row.detail_id)
 			.map((row) => ({
 				id: row.detail_id,
 				uuid: row.detail_uuid,
 				key: row.detail_key,
-				value: row.detail_value,
+				value: isImageDetailKey(row.detail_key)
+					? mapImageDetailValue(
+							row.detail_key,
+							row.detail_value,
+							themeMediaPathById,
+						)
+					: row.detail_value,
 				created_at: row.detail_created_at,
 				updated_at: row.detail_updated_at,
 			}));
