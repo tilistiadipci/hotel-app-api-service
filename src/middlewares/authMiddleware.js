@@ -1,9 +1,11 @@
 const Setting = require("../models/settingModel");
 const Player = require("../models/playerModel");
 const { respond } = require("../helpers/response");
+const verifyHotelLicense = require("./hotelLicenseMiddleware");
 
 // Expect `x-api-key` header containing a player token.
 // Expect `x-player-license` header containing the player serial number.
+// Expect `x-hotel-license` header containing the secret hotel license key.
 // Middleware enforces:
 // 1) Global toggle via settings (`api_key_status` = active)
 // 2) Ensure the incoming token + serial exists in `players`
@@ -13,12 +15,6 @@ module.exports = async (req, res, next) => {
 
 		if (req.path.startsWith("/socket.io")) {
 			return next();
-		}
-
-		// Check global API key toggle
-		const activeSetting = await Setting.getByKey("api_key_status");
-		if (!activeSetting || activeSetting.value !== "active") {
-			return respond(res, 401, "API key inactive", []);
 		}
 
 		const apiKey = req.headers["x-api-key"];
@@ -36,6 +32,11 @@ module.exports = async (req, res, next) => {
 			return respond(res, 401, "player unregistered license", []);
 		}
 
+		const activeSetting = await Setting.getByKey("api_key_status", player.hotel_id);
+		if (!activeSetting || activeSetting.value !== "active") {
+			return respond(res, 401, "API key inactive", []);
+		}
+
 		// TODO: player not checkin can't use API
 
 		req.apiKey = {
@@ -44,7 +45,7 @@ module.exports = async (req, res, next) => {
 			playerLicense,
 		};
 		req.player = player;
-		next();
+		return verifyHotelLicense(req, res, next);
 	} catch (err) {
 		console.error("API key verification error:", err.message);
 		return respond(res, 500, "API key verification failed", []);

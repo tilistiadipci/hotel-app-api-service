@@ -1,9 +1,11 @@
 const pool = require("../config/database");
 
-const getByKey = async (key) => {
+const getByKey = async (key, hotelId = null) => {
+	const hotelFilter = hotelId ? " AND hotel_id = ?" : "";
+	const params = hotelId ? [key, hotelId] : [key];
 	const [rows] = await pool.query(
-		"SELECT * FROM settings WHERE `key` = ? AND deleted_at IS NULL LIMIT 1",
-		[key],
+		`SELECT * FROM settings WHERE \`key\` = ?${hotelFilter} AND deleted_at IS NULL LIMIT 1`,
+		params,
 	);
 	return rows[0] || null;
 };

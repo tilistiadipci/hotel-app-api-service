@@ -41,9 +41,30 @@
 
 ## NOTES
 
-### API KEY HEADER
-token dari players
+### API authentication headers
 
-### API KEY PLAYER LICENSE
-serial player
+Protected player requests use three headers:
+
+```http
+X-Api-Key: <token from players.token>
+X-Player-License: <player serial>
+X-Hotel-License: <secret hotel license key>
+```
+
+The player bootstrap endpoints below do not need `X-Api-Key` yet, but they do
+require a valid `X-Hotel-License` belonging to the player's hotel:
+
+```text
+GET /api/players/{serial}
+GET /api/players/{serial}/tenants
+```
+
+A hotel license key is generated from the Laravel CMS directory. The plaintext
+key is displayed once and only its bcrypt hash is stored in the database:
+
+```shell
+php artisan hotel:license-key BIO-HOTEL
+```
+
+Run the command again to rotate/revoke the previous key.
 

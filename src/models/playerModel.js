@@ -82,7 +82,7 @@ const getBySerial = async (serial) => {
 
 const getTokenBySerial = async (serial) => {
 	const [rows] = await pool.execute(
-		`SELECT id, uuid, serial, token, is_active
+		`SELECT id, uuid, hotel_id, serial, token, is_active
 		FROM ${TABLE}
 		WHERE serial = ?
 			AND is_active = 1

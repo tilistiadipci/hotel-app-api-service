@@ -29,6 +29,7 @@ const runningTextRoutes = require("./routes/runningTextRoutes");
 const weatherRoutes = require("./routes/weatherRoutes");
 const apiKeyAuth = require("./middlewares/authMiddleware");
 const allowAnonymous = require("./middlewares/allowAnonymous");
+const hotelLicenseAuth = require("./middlewares/hotelLicenseMiddleware");
 
 app.use(cors());
 app.use(express.json());
@@ -42,7 +43,7 @@ app.use("/api/media", mediaRoutes);
 
 // Allow anonymous access for place QR before global apiKeyAuth
 app.use("/api/places/:uuid/qr", allowAnonymous);
-app.use("/api/players/:serial", allowAnonymous);
+app.use("/api/players/:serial", allowAnonymous, hotelLicenseAuth);
 app.use("/api/menu-transactions/notifications/midtrans", allowAnonymous);
 app.use("/api/menu-transactions/payment-finish", allowAnonymous);
 app.use("/api/menu-transactions/:uuid/payment-page", allowAnonymous);
