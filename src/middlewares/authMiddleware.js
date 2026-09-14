@@ -4,11 +4,12 @@ const { respond } = require("../helpers/response");
 const verifyHotelLicense = require("./hotelLicenseMiddleware");
 
 // Expect `x-api-key` header containing a player token.
-// Expect `x-player-license` header containing the player serial number.
-// Expect `x-hotel-license` header containing the secret hotel license key.
+// Expect `x-player-license` header containing the player serial number
+// (globally unique across all hotels — see `players.serial` unique constraint).
 // Middleware enforces:
 // 1) Global toggle via settings (`api_key_status` = active)
 // 2) Ensure the incoming token + serial exists in `players`
+// 3) Ensure the player's hotel has an active license in `hotel_licenses` (see hotelLicenseMiddleware)
 module.exports = async (req, res, next) => {
 	try {
 		if (req.allowAnonymous) return next();

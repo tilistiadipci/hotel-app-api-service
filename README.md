@@ -43,28 +43,28 @@
 
 ### API authentication headers
 
-Protected player requests use three headers:
+Protected player requests use two headers:
 
 ```http
 X-Api-Key: <token from players.token>
 X-Player-License: <player serial>
-X-Hotel-License: <secret hotel license key>
 ```
 
-The player bootstrap endpoints below do not need `X-Api-Key` yet, but they do
-require a valid `X-Hotel-License` belonging to the player's hotel:
+`players.serial` is unique across all hotels, so a player serial always
+resolves to exactly one hotel. The hotel license is never sent by the player
+device — it is looked up server-side from the `hotel_licenses` table using
+the player's `hotel_id`. If the hotel has no active/trial license row, the
+API responds `401 Unauthorized` with `"Hotel does not have a license"`.
+
+The player bootstrap endpoints below do not need `X-Api-Key`, but they still
+go through the same database license check:
 
 ```text
 GET /api/players/{serial}
 GET /api/players/{serial}/tenants
 ```
 
-A hotel license key is generated from the Laravel CMS directory. The plaintext
-key is displayed once and only its bcrypt hash is stored in the database:
-
-```shell
-php artisan hotel:license-key BIO-HOTEL
-```
-
-Run the command again to rotate/revoke the previous key.
+Hotel licenses are managed from the Laravel CMS (issuing/rotating license
+keys for admin-facing use), but that key is no longer required by the player
+API — only the existence of an active license row matters.
 

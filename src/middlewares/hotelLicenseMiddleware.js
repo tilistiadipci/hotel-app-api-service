@@ -2,18 +2,11 @@ const HotelLicense = require("../models/hotelLicenseModel");
 const Player = require("../models/playerModel");
 const { respond } = require("../helpers/response");
 
-const getHeaderValue = (req) => {
-	const value = req.headers["x-hotel-license"];
-	return Array.isArray(value) ? value[0] : value;
-};
-
+// Resolves the player from `req.player` (set by authMiddleware) or from the
+// serial (`:serial` param or `x-player-license` header), then checks the
+// database for an active hotel license tied to that player's hotel.
 const verifyHotelLicense = async (req, res, next) => {
 	try {
-		const hotelLicense = getHeaderValue(req);
-		if (!hotelLicense) {
-			return respond(res, 401, "Missing X-Hotel-License header", []);
-		}
-
 		let player = req.player;
 		if (!player) {
 			const serial = req.params.serial || req.headers["x-player-license"];
@@ -28,14 +21,14 @@ const verifyHotelLicense = async (req, res, next) => {
 			return respond(res, 401, "Player is not registered to an active hotel", []);
 		}
 
-		const license = await HotelLicense.verify(player.hotel_id, hotelLicense);
-		if (!license) {
-			return respond(res, 403, "Invalid or inactive hotel license", []);
+		const licenses = await HotelLicense.getActiveByHotelId(player.hotel_id);
+		if (!licenses.length) {
+			return respond(res, 401, "Hotel does not have a license", []);
 		}
 
 		req.player = player;
 		req.hotelId = player.hotel_id;
-		req.hotelLicense = license;
+		req.hotelLicense = licenses[0];
 
 		return next();
 	} catch (err) {
