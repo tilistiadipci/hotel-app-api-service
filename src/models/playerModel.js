@@ -35,6 +35,7 @@ const list = async ({ isActive, serial, includeDeleted = false } = {}) => {
 const listWithThemeSummary = async ({
 	isActive,
 	serial,
+	hotelId,
 	includeDeleted = false,
 } = {}) => {
 	const conditions = [];
@@ -54,6 +55,11 @@ const listWithThemeSummary = async ({
 		params.push(`%${serial}%`);
 	}
 
+	if (hotelId) {
+		conditions.push("p.hotel_id = ?");
+		params.push(hotelId);
+	}
+
 	const where = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
 	const sql = `
 		SELECT
@@ -62,8 +68,11 @@ const listWithThemeSummary = async ({
 			t.uuid AS theme_ref_uuid,
 			t.name AS theme_ref_name
 		FROM ${TABLE} p
+		LEFT JOIN hotel_theme ht
+			ON ht.theme_id = p.theme_id
+			AND ht.hotel_id = p.hotel_id
 		LEFT JOIN ${THEME_TABLE} t
-			ON t.id = p.theme_id
+			ON t.id = ht.theme_id
 			AND t.deleted_at IS NULL
 		${where}
 		ORDER BY p.id ASC
@@ -136,7 +145,7 @@ const getDetailByUuid = async (uuid) => {
 			t.uuid AS theme_ref_uuid,
 			t.name AS theme_ref_name,
 			t.description AS theme_ref_description,
-			t.is_default AS theme_ref_is_default,
+			CAST(ht.is_default AS CHAR) AS theme_ref_is_default,
 			t.image_id AS theme_ref_image_id,
 			m.storage_path AS theme_ref_image_path,
 			td.id AS theme_detail_id,
@@ -162,8 +171,11 @@ const getDetailByUuid = async (uuid) => {
 				)
 		) b
 			ON b.player_id = p.id
+		LEFT JOIN hotel_theme ht
+			ON ht.theme_id = p.theme_id
+			AND ht.hotel_id = p.hotel_id
 		LEFT JOIN ${THEME_TABLE} t
-			ON t.id = p.theme_id
+			ON t.id = ht.theme_id
 			AND t.deleted_at IS NULL
 		LEFT JOIN ${MEDIA_TABLE} m
 			ON m.id = t.image_id
@@ -188,7 +200,7 @@ const getDetailBySerial = async (serial) => {
 			t.uuid AS theme_ref_uuid,
 			t.name AS theme_ref_name,
 			t.description AS theme_ref_description,
-			t.is_default AS theme_ref_is_default,
+			CAST(ht.is_default AS CHAR) AS theme_ref_is_default,
 			t.image_id AS theme_ref_image_id,
 			m.storage_path AS theme_ref_image_path,
 			md1.storage_path AS media_path_1,
@@ -216,8 +228,11 @@ const getDetailBySerial = async (serial) => {
 				)
 		) b
 			ON b.player_id = p.id
+		LEFT JOIN hotel_theme ht
+			ON ht.theme_id = p.theme_id
+			AND ht.hotel_id = p.hotel_id
 		LEFT JOIN ${THEME_TABLE} t
-			ON t.id = p.theme_id
+			ON t.id = ht.theme_id
 			AND t.deleted_at IS NULL
 		LEFT JOIN ${MEDIA_TABLE} m
 			ON m.id = t.image_id

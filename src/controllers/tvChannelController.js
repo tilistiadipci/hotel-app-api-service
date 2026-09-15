@@ -24,7 +24,8 @@ exports.getTvChannels = async (req, res) => {
 
 		const isActive = parseActiveFlag(rawActive, true);
 
-		const channels = await TvChannel.list({ type, region, isActive });
+		const hotelId = req.hotelId || req.player?.hotel_id;
+		const channels = await TvChannel.list({ type, region, isActive, hotelId });
 		return respond(res, 200, "success", channels, "TV channel list");
 	} catch (err) {
 		console.error("getTvChannels error:", err.message);
@@ -38,7 +39,7 @@ exports.getTvChannelDetail = async (req, res) => {
 		const { uuid } = req.params;
 		if (!uuid) return respond(res, 400, "uuid is required", []);
 
-		const channel = await TvChannel.getByUuid(uuid);
+		const channel = await TvChannel.getByUuid(uuid, req.hotelId || req.player?.hotel_id);
 		if (!channel) return respondObject(res, 404, "Channel not found", null);
 
 		return respondObject(res, 200, "success", channel, "TV channel detail");

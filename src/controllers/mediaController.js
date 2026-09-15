@@ -3,32 +3,62 @@ const fs = require("fs");
 const { respond } = require("../helpers/response");
 const sharp = require("sharp");
 const Media = require("../models/mediaModel");
-
-const baseDir = process.env.MEDIA_STORAGE_PATH;
+const HotelConfiguration = require("../models/hotelConfigurationModel");
+const { resolveHotelMediaRoot } = require("../helpers/hotelMediaPath");
 
 // GET /api/media?type=image&path=images/movies/sample_cover.jpg
 exports.getMedia = async (req, res) => {
   try {
-    if (!baseDir) {
-      return respond(res, 500, "MEDIA_STORAGE_PATH not configured", []);
-    }
-
+    let hotelId = req.hotelId || req.player?.hotel_id;
     const { type, path: relPathRaw } = req.query;
 
     if (!type || !relPathRaw) {
       return respond(res, 400, "type and path are required", []);
     }
 
+    if (!hotelId && req.query.hotel) {
+      const requestedHotel = await HotelConfiguration.getByHotelCode(req.query.hotel);
+      hotelId = requestedHotel?.hotel_id;
+    }
+
+    const storagePath = String(relPathRaw)
+      .trim()
+      .replace(/\\/g, "/")
+      .replace(/^\/+/, "");
+    const media = await Media.getAccessibleByStoragePath(storagePath, hotelId);
+
+    if (!media) {
+      return respond(res, 404, "Media not found", []);
+    }
+
+    let baseDir;
+    if (media.hotel_id) {
+      const hotelConfiguration = await HotelConfiguration.getByHotelId(media.hotel_id);
+      baseDir = resolveHotelMediaRoot(
+        process.env.MEDIA_STORAGE_PATH?.trim(),
+        hotelConfiguration?.media_root,
+      );
+    } else {
+      baseDir = process.env.MEDIA_STORAGE_PATH?.trim();
+    }
+
+    if (!baseDir) {
+      const scope = media.hotel_id ? "hotel" : "global";
+      return respond(res, 404, `Media root is not configured for ${scope}`, []);
+    }
+
     // Normalize and strip traversal attempts
     const normalizedRel = path
-      .normalize(relPathRaw)
+      .normalize(storagePath)
       .replace(/^(\.\.[/\\])+/, "")
       .replace(/^[/\\]+/, "");
 
-    const absPath = path.resolve(baseDir, normalizedRel);
+    const resolvedBaseDir = path.resolve(baseDir);
+    const absPath = path.resolve(resolvedBaseDir, normalizedRel);
 
     // prevent path traversal outside base dir
-    if (!absPath.startsWith(path.resolve(baseDir))) {
+    const pathFromBase = path.relative(resolvedBaseDir, absPath);
+    if (pathFromBase.startsWith("..") || path.isAbsolute(pathFromBase)) {
       return respond(res, 403, "Forbidden", []);
     }
 
@@ -172,6 +202,7 @@ exports.getAllMedia = async (req, res) => {
     const q = req.query.q || req.query.search || "";
 
     const filters = {
+      hotelId: req.hotelId || req.player?.hotel_id,
       type: type ? String(type).trim() : undefined,
       category: category ? String(category).trim() : undefined,
       isActive:

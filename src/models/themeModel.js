@@ -7,29 +7,39 @@ const MEDIA_TABLE = "medias";
 const baseSelect = `
 	SELECT
 		t.*,
+		CAST(ht.is_default AS CHAR) AS hotel_is_default,
 		m.storage_path AS image_path
 	FROM ${TABLE} t
+	INNER JOIN hotel_theme ht
+		ON ht.theme_id = t.id
 	LEFT JOIN ${MEDIA_TABLE} m
 		ON m.id = t.image_id
 		AND m.deleted_at IS NULL
 `;
 
-const list = async () => {
+const list = async (hotelId) => {
+	if (!hotelId) return [];
+
 	const [rows] = await pool.execute(
 		`
 		${baseSelect}
-		WHERE t.deleted_at IS NULL
+		WHERE ht.hotel_id = ?
+			AND t.deleted_at IS NULL
 		ORDER BY t.id DESC
 		`,
+		[hotelId],
 	);
 	return rows;
 };
 
-const getDetailByUuid = async (uuid) => {
+const getDetailByUuid = async (uuid, hotelId) => {
+	if (!hotelId) return [];
+
 	const [rows] = await pool.execute(
 		`
 		SELECT
 			t.*,
+			CAST(ht.is_default AS CHAR) AS hotel_is_default,
 			m.storage_path AS image_path,
 			td.id AS detail_id,
 			td.uuid AS detail_uuid,
@@ -38,6 +48,9 @@ const getDetailByUuid = async (uuid) => {
 			td.created_at AS detail_created_at,
 			td.updated_at AS detail_updated_at
 		FROM ${TABLE} t
+		INNER JOIN hotel_theme ht
+			ON ht.theme_id = t.id
+			AND ht.hotel_id = ?
 		LEFT JOIN ${MEDIA_TABLE} m
 			ON m.id = t.image_id
 			AND m.deleted_at IS NULL
@@ -47,7 +60,7 @@ const getDetailByUuid = async (uuid) => {
 			AND t.deleted_at IS NULL
 		ORDER BY td.id ASC
 		`,
-		[uuid],
+		[hotelId, uuid],
 	);
 	return rows;
 };

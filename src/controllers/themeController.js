@@ -9,14 +9,19 @@ const {
 	mapImageDetailValue,
 } = require("../helpers/themeDetailMedia");
 
-const mapTheme = (row) => ({
-	...row,
-	image_url: buildMediaUrl("image", row.image_path),
-});
+const mapTheme = (row) => {
+	const { hotel_is_default, ...theme } = row;
+
+	return {
+		...theme,
+		is_default: hotel_is_default,
+		image_url: buildMediaUrl("image", row.image_path),
+	};
+};
 
 exports.getThemes = async (req, res) => {
 	try {
-		const themes = await Theme.list();
+		const themes = await Theme.list(req.hotelId || req.player?.hotel_id);
 		return respond(
 			res,
 			200,
@@ -35,7 +40,10 @@ exports.getThemeDetail = async (req, res) => {
 		const { uuid } = req.params;
 		if (!uuid) return respondObject(res, 400, "uuid is required", null);
 
-		const rows = await Theme.getDetailByUuid(uuid);
+		const rows = await Theme.getDetailByUuid(
+			uuid,
+			req.hotelId || req.player?.hotel_id,
+		);
 		if (!rows.length) {
 			return respondObject(res, 404, "Theme not found", null);
 		}
@@ -71,7 +79,7 @@ exports.getThemeDetail = async (req, res) => {
 			uuid: firstRow.uuid,
 			name: firstRow.name,
 			description: firstRow.description,
-			is_default: firstRow.is_default,
+			is_default: firstRow.hotel_is_default,
 			image_id: firstRow.image_id,
 			image_url: buildMediaUrl("image", firstRow.image_path),
 			created_at: firstRow.created_at,

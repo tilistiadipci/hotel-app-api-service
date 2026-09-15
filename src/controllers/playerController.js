@@ -17,7 +17,7 @@ const buildFilters = (req) => {
 		rawActive === undefined ? undefined : parseActiveFlag(rawActive, true);
 	const serial = req.query.serial || req.query.q || undefined;
 
-	return { isActive, serial };
+	return { isActive, serial, hotelId: req.hotelId || req.player?.hotel_id };
 };
 
 const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
@@ -56,6 +56,7 @@ const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
 		deleted_at: firstRow.deleted_at,
 		alias: firstRow.alias,
 		guest_name: firstRow.guest_name,
+		default_language: settings.default_language || "id_ID",
 		settings: settings,
 		theme: firstRow.theme_ref_id
 			? {
@@ -144,7 +145,7 @@ const getPlayerTokenBySerial = async (
 	});
 
 	const [settings, themeMediaRows] = await Promise.all([
-		Setting.getAllWithMedia(),
+		Setting.getAllWithMedia(player.hotel_id),
 		themeImageIds.length ? Media.getMediaByIds(themeImageIds) : [],
 	]);
 

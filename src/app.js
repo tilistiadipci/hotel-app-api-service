@@ -2,6 +2,9 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const http = require("http");
+const axios = require("axios");
+const fs = require("fs/promises");
+const path = require("path");
 const socket = require("./helpers/socket");
 
 const app = express();
@@ -37,6 +40,39 @@ app.use(express.json());
 app.get("/", (_req, res) => {
 	res.status(404).type("text/plain").send("API not found");
 });
+// app.get("/playlist", async (req, res) => {
+// 	try {
+// 		const response = await axios.get("https://bestplay.my.id/may7152", {
+// 			headers: {
+// 				"User-Agent": req.get("user-agent") || "OTT Navigator/1.7.0.2.4 (Linux;Android 16; en; 73b005)",
+// 				Accept: req.get("accept") || "*/*",
+// 			},
+// 			responseType: "arraybuffer",
+// 			timeout: 30000,
+// 			maxRedirects: 5,
+// 			validateStatus: () => true,
+// 		});
+
+// 		if (response.headers["content-type"]) {
+// 			res.set("Content-Type", response.headers["content-type"]);
+// 		}
+
+// 		const responseBody = Buffer.from(response.data);
+// 		const resultFile = path.resolve(__dirname, "../results.txt");
+
+// 		await fs.writeFile(resultFile, responseBody);
+
+// 		return res.status(response.status).send(responseBody);
+// 	} catch (error) {
+// 		const isTimeout = error.code === "ECONNABORTED" || error.code === "ETIMEDOUT";
+
+// 		console.error("BestPlay proxy error:", error.message);
+// 		return res.status(isTimeout ? 504 : 502).json({
+// 			message: isTimeout ? "BestPlay request timed out" : "Failed to fetch BestPlay response",
+// 		});
+// 	}
+// });
+
 
 // Media routes now handle auth per-route (see mediaRoutes)
 app.use("/api/media", mediaRoutes);

@@ -31,7 +31,9 @@ const getAll = async (columns = []) => {
 	return rows || [];
 };
 
-const getAllWithMedia = async () => {
+const getAllWithMedia = async (hotelId) => {
+	if (!hotelId) return [];
+
 	const sql = `
 		SELECT 
 			s.id,
@@ -43,15 +45,18 @@ const getAllWithMedia = async () => {
 		LEFT JOIN medias m 
 			ON s.value = m.id 
 			AND s.key = 'general_app_logo'
+			AND m.hotel_id = s.hotel_id
 			AND m.deleted_at IS NULL
 		LEFT JOIN medias m2
 			ON s.value = m2.id
 			AND s.key = 'general_app_logo2'
+			AND m2.hotel_id = s.hotel_id
 			AND m2.deleted_at IS NULL
-		WHERE s.deleted_at IS NULL
+		WHERE s.hotel_id = ?
+			AND s.deleted_at IS NULL
 	`;
 
-	const [rows] = await pool.query(sql);
+	const [rows] = await pool.query(sql, [hotelId]);
 	return rows;
 };
 
