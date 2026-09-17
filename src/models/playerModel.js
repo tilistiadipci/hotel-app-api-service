@@ -139,6 +139,8 @@ const getDetailByUuid = async (uuid) => {
 	const [rows] = await pool.execute(
 		`SELECT
 			p.*,
+			h.code AS hotel_code,
+			h.adm4 AS hotel_adm4,
 			b.player_id AS booking_player_id,
 			b.guest_name,
 			t.id AS theme_ref_id,
@@ -155,6 +157,9 @@ const getDetailByUuid = async (uuid) => {
 			td.created_at AS theme_detail_created_at,
 			td.updated_at AS theme_detail_updated_at
 		FROM ${TABLE} p
+		LEFT JOIN hotels h
+			ON h.id = p.hotel_id
+			AND h.deleted_at IS NULL
 		LEFT JOIN (
 			SELECT
 				b1.player_id,
@@ -194,6 +199,8 @@ const getDetailBySerial = async (serial) => {
 	const [rows] = await pool.execute(
 		`SELECT
 			p.*,
+			h.code AS hotel_code,
+			h.adm4 AS hotel_adm4,
 			b.player_id AS booking_player_id,
 			b.guest_name,
 			t.id AS theme_ref_id,
@@ -212,6 +219,9 @@ const getDetailBySerial = async (serial) => {
 			td.created_at AS theme_detail_created_at,
 			td.updated_at AS theme_detail_updated_at
 		FROM ${TABLE} p
+		LEFT JOIN hotels h
+			ON h.id = p.hotel_id
+			AND h.deleted_at IS NULL
 		LEFT JOIN (
 			SELECT
 				b1.player_id,

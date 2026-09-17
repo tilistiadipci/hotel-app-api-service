@@ -45,6 +45,7 @@ const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
 		uuid: firstRow.uuid,
 		name: firstRow.name,
 		serial: firstRow.serial,
+		hotel_code: firstRow.hotel_code,
 		token: firstRow.token,
 		is_active: firstRow.is_active,
 		theme_id: firstRow.theme_id,
@@ -56,6 +57,7 @@ const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
 		deleted_at: firstRow.deleted_at,
 		alias: firstRow.alias,
 		guest_name: firstRow.guest_name,
+		adm4: firstRow.hotel_adm4 || null,
 		default_language: settings.default_language || "id_ID",
 		settings: settings,
 		theme: firstRow.theme_ref_id
