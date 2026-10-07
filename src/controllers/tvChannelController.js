@@ -1,8 +1,24 @@
 const TvChannel = require("../models/tvChannelModel");
-const { respond, respondObject } = require("../helpers/response");
-const { parseActiveFlag } = require("../helpers/common");
+const { respondPagination, respondObject } = require("../helpers/response");
+const { buildStreamUrl, parseActiveFlag } = require("../helpers/common");
 
-// GET /api/tvchannels?type=digital&region=national
+const parsePositiveInteger = (rawValue, defaultValue, maxValue) => {
+	const parsed = Number.parseInt(rawValue, 10);
+	if (!Number.isInteger(parsed) || parsed < 1) return defaultValue;
+	return maxValue ? Math.min(parsed, maxValue) : parsed;
+};
+
+const mapChannel = (channel) => {
+	const streamUrl = buildStreamUrl(channel.stream_url);
+
+	return {
+		...channel,
+		stream_url: streamUrl,
+		stream_urls: streamUrl ? [streamUrl] : [],
+	};
+};
+
+// GET /api/tvchannels?type=digital&region=national&page=1&limit=20
 exports.getTvChannels = async (req, res) => {
 	try {
 		const allowedTypes = ["digital", "streaming"];
@@ -23,13 +39,37 @@ exports.getTvChannels = async (req, res) => {
 				: undefined;
 
 		const isActive = parseActiveFlag(rawActive, true);
+		const page = parsePositiveInteger(req.query.page, 1);
+		const limit = parsePositiveInteger(req.query.limit, 20, 100);
+		const offset = (page - 1) * limit;
 
 		const hotelId = req.hotelId || req.player?.hotel_id;
-		const channels = await TvChannel.list({ type, region, isActive, hotelId });
-		return respond(res, 200, "success", channels, "TV channel list");
+		const playerId = req.player?.id || req.apiKey?.playerId;
+		const result = await TvChannel.list({
+			type,
+			region,
+			isActive,
+			hotelId,
+			playerId,
+			offset,
+			limit,
+		});
+		return respondPagination(
+			res,
+			200,
+			"success",
+			result.items.map(mapChannel),
+			{
+				page,
+				offset,
+				limit,
+				total: Number(result.total) || 0,
+			},
+			"TV channel list",
+		);
 	} catch (err) {
 		console.error("getTvChannels error:", err.message);
-		return respond(res, 500, "Failed to fetch TV channels", []);
+		return respondObject(res, 500, "Failed to fetch TV channels", null);
 	}
 };
 
@@ -37,12 +77,16 @@ exports.getTvChannels = async (req, res) => {
 exports.getTvChannelDetail = async (req, res) => {
 	try {
 		const { uuid } = req.params;
-		if (!uuid) return respond(res, 400, "uuid is required", []);
+		if (!uuid) return respondObject(res, 400, "uuid is required", null);
 
-		const channel = await TvChannel.getByUuid(uuid, req.hotelId || req.player?.hotel_id);
+		const channel = await TvChannel.getByUuid(
+			uuid,
+			req.hotelId || req.player?.hotel_id,
+			req.player?.id || req.apiKey?.playerId,
+		);
 		if (!channel) return respondObject(res, 404, "Channel not found", null);
 
-		return respondObject(res, 200, "success", channel, "TV channel detail");
+		return respondObject(res, 200, "success", mapChannel(channel), "TV channel detail");
 	} catch (err) {
 		console.error("getTvChannelDetail error:", err.message);
 		return respondObject(res, 500, "Failed to fetch TV channel detail", null);

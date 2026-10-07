@@ -20,7 +20,34 @@ const buildFilters = (req) => {
 	return { isActive, serial, hotelId: req.hotelId || req.player?.hotel_id };
 };
 
-const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
+const mapSettings = (settings) =>
+	settings.reduce((acc, setting) => {
+		let value = setting.value;
+
+		if (setting.key === "general_app_logo" && setting.storage_path) {
+			value = buildMediaUrl("image", setting.storage_path);
+		}
+
+		if (setting.key === "general_app_logo2" && setting.storage_path2) {
+			value = buildMediaUrl("image", setting.storage_path2);
+		}
+
+		// unset firebase_credentials_json value for security reason,
+		// but still return null or object to avoid breaking change
+		if (setting.key === "firebase_credentials_json") {
+			value = setting.value ? {} : null;
+		}
+
+		acc[setting.key] = value;
+		return acc;
+	}, {});
+
+const mapPlayerDetail = (
+	rows,
+	settings,
+	settingsOverride,
+	themeMediaPathById = {},
+) => {
 	const [firstRow] = rows;
 	const details = rows
 		.filter((row) => row.theme_detail_id)
@@ -60,6 +87,7 @@ const mapPlayerDetail = (rows, settings, themeMediaPathById = {}) => {
 		adm4: firstRow.hotel_adm4 || null,
 		default_language: settings.default_language || "id_ID",
 		settings: settings,
+		settings_override: settingsOverride,
 		theme: firstRow.theme_ref_id
 			? {
 					id: firstRow.theme_ref_id,
@@ -146,38 +174,21 @@ const getPlayerTokenBySerial = async (
 		valueField: "theme_detail_value",
 	});
 
-	const [settings, themeMediaRows] = await Promise.all([
+	const [settings, settingsOverride, themeMediaRows] = await Promise.all([
 		Setting.getAllWithMedia(player.hotel_id),
+		Setting.getPlayerOverridesWithMedia(player.id),
 		themeImageIds.length ? Media.getMediaByIds(themeImageIds) : [],
 	]);
 
 	const themeMediaPathById = buildMediaPathById(themeMediaRows);
-	const mapSetting = settings.reduce((acc, setting) => {
-		let value = setting.value;
-
-		if (setting.key === "general_app_logo" && setting.storage_path) {
-			value = buildMediaUrl("image", setting.storage_path);
-		}
-
-		if (setting.key === "general_app_logo2" && setting.storage_path2) {
-			value = buildMediaUrl("image", setting.storage_path2);
-		}
-
-		// unset firebase_credentials_json value for security reason, 
-		// but still return null or object to avoid breaking change
-		if (setting.key === "firebase_credentials_json") {
-			value = setting.value ? {} : null;
-		}
-
-		acc[setting.key] = value;
-		return acc;
-	}, {});
+	const mapSetting = mapSettings(settings);
+	const mapSettingOverride = mapSettings(settingsOverride);
 
 	return respondObject(
 		res,
 		200,
 		"success",
-		mapPlayerDetail(rows, mapSetting, themeMediaPathById),
+		mapPlayerDetail(rows, mapSetting, mapSettingOverride, themeMediaPathById),
 		"Player token",
 	);
 };
