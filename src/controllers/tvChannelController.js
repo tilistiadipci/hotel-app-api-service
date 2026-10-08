@@ -1,6 +1,6 @@
 const TvChannel = require("../models/tvChannelModel");
 const { respondPagination, respondObject } = require("../helpers/response");
-const { buildStreamUrl, parseActiveFlag } = require("../helpers/common");
+const { buildMediaUrl, buildStreamUrl, parseActiveFlag } = require("../helpers/common");
 
 const parsePositiveInteger = (rawValue, defaultValue, maxValue) => {
 	const parsed = Number.parseInt(rawValue, 10);
@@ -10,9 +10,11 @@ const parsePositiveInteger = (rawValue, defaultValue, maxValue) => {
 
 const mapChannel = (channel) => {
 	const streamUrl = buildStreamUrl(channel.stream_url);
+	const { image_path: imagePath, ...data } = channel;
 
 	return {
-		...channel,
+		...data,
+		logo_url: buildMediaUrl("image", imagePath),
 		stream_url: streamUrl,
 		stream_urls: streamUrl ? [streamUrl] : [],
 	};

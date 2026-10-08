@@ -1,12 +1,19 @@
 // Shared helper functions
 
 const buildMediaUrl = (type, path) => {
+	if (!path) return null;
+
+	const value = String(path).trim();
+	if (!value) return null;
+	if (/^https?:\/\//i.test(value)) return value;
+	if (value.startsWith("//")) return `https:${value}`;
+
 	if (type == 'image') {
-		return path ? `${process.env.APP_URL}/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(path)}` : null;
+		return `${process.env.APP_URL}/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(value)}`;
 	}
 
 	if (type == 'audio' || type == 'video') {
-		return path ? `${process.env.STREAM_URL}/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(path)}` : null;
+		return `${process.env.STREAM_URL}/api/media?type=${encodeURIComponent(type)}&path=${encodeURIComponent(value)}`;
 	}
 
 	return null

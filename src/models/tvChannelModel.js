@@ -6,6 +6,7 @@ const SELECT_FIELDS = `
 	COALESCE(htc.custom_name, tv.name) AS name,
 	tv.slug,
 	COALESCE(htc.custom_image_id, tv.image_id) AS image_id,
+	image.storage_path AS image_path,
 	COALESCE(htc.custom_type, tv.type) AS type,
 	COALESCE(htc.custom_region, tv.region) AS region,
 	COALESCE(htc.custom_stream_url, tv.stream_url) AS stream_url,
@@ -87,6 +88,9 @@ const list = async ({
 		LEFT JOIN player_tv_channel ptc
 			ON ptc.player_id = p.id
 			AND ptc.tv_channel_id = tv.id
+		LEFT JOIN medias image
+			ON image.id = COALESCE(htc.custom_image_id, tv.image_id)
+			AND image.deleted_at IS NULL
 	`;
 
 	const sql = `
@@ -120,6 +124,9 @@ const getByUuid = async (uuid, hotelId, playerId) => {
 		 LEFT JOIN player_tv_channel ptc
 			ON ptc.player_id = p.id
 			AND ptc.tv_channel_id = tv.id
+		 LEFT JOIN medias image
+			ON image.id = COALESCE(htc.custom_image_id, tv.image_id)
+			AND image.deleted_at IS NULL
 		 WHERE tv.uuid = ?
 			AND htc.hotel_id = ?
 			AND p.hotel_id = htc.hotel_id
