@@ -3,48 +3,31 @@ const fs = require("fs");
 const { respond } = require("../helpers/response");
 const sharp = require("sharp");
 const Media = require("../models/mediaModel");
-const HotelConfiguration = require("../models/hotelConfigurationModel");
-const { resolveHotelMediaRoot } = require("../helpers/hotelMediaPath");
 
 // GET /api/media?type=image&path=images/movies/sample_cover.jpg
+// All media files are served from the shared MEDIA_STORAGE_PATH root.
 exports.getMedia = async (req, res) => {
   try {
-    let hotelId = req.hotelId || req.player?.hotel_id;
     const { type, path: relPathRaw } = req.query;
 
     if (!type || !relPathRaw) {
       return respond(res, 400, "type and path are required", []);
     }
 
-    if (!hotelId && req.query.hotel) {
-      const requestedHotel = await HotelConfiguration.getByHotelCode(req.query.hotel);
-      hotelId = requestedHotel?.hotel_id;
-    }
-
     const storagePath = String(relPathRaw)
       .trim()
       .replace(/\\/g, "/")
       .replace(/^\/+/, "");
-    const media = await Media.getAccessibleByStoragePath(storagePath, hotelId);
+    const media = await Media.getAccessibleByStoragePath(storagePath);
 
     if (!media) {
       return respond(res, 404, "Media not found", []);
     }
 
-    let baseDir;
-    if (media.hotel_id) {
-      const hotelConfiguration = await HotelConfiguration.getByHotelId(media.hotel_id);
-      baseDir = resolveHotelMediaRoot(
-        process.env.MEDIA_STORAGE_PATH?.trim(),
-        hotelConfiguration?.media_root,
-      );
-    } else {
-      baseDir = process.env.MEDIA_STORAGE_PATH?.trim();
-    }
+    const baseDir = process.env.MEDIA_STORAGE_PATH?.trim();
 
     if (!baseDir) {
-      const scope = media.hotel_id ? "hotel" : "global";
-      return respond(res, 404, `Media root is not configured for ${scope}`, []);
+      return respond(res, 404, "Media root is not configured", []);
     }
 
     // Normalize and strip traversal attempts
